@@ -17,10 +17,18 @@ function domReady(fn: Function): void {
 }
 
 /**
+ * 使用示例：
+ * 
+ * domReady(() => {
+ *      // 要处理逻辑
+ * });
+ */
+
+/**
  * 确保页面中 js/css 完全加载
- * @param type 
- * @param url 
- * @param fnSucc 
+ * @param type 文件类型
+ * @param url url
+ * @param fnSucc 加载之后的回调函数
  */
 function loadFile(type: string = 'script', url: string, fnSucc: Function): void {
     const oTag: HTMLScriptElement | HTMLLinkElement | any = document.createElement(type);
@@ -40,8 +48,16 @@ function loadFile(type: string = 'script', url: string, fnSucc: Function): void 
 }
 
 /**
+ * 使用示例：
+ * 
+ * loadFile('script', 'https://www.baidu.com/src/xxx.js', () => {
+ *      // 要处理逻辑
+ * });
+ */
+
+/**
  * url 上面获取参数对应的值
- * @param {*String} text 要显示的文本内容
+ * @param type 要截的值名称
  */
 function getQueryString(name: string): string | null {
     const reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
@@ -53,6 +69,13 @@ function getQueryString(name: string): string | null {
 }
 
 /**
+ * 使用示例：
+ * 
+ * getQueryString('script', 'https://www.baidu.com/src/xxx.js');
+ */
+
+
+/**
  * 生成一个范围内随机一个数字
  * 例如想要 4-13 之间的随机数，要写成：rnd(4,14)
  * @param startNum 开始数字
@@ -61,6 +84,13 @@ function getQueryString(name: string): string | null {
 function rnd(startNum: number, endNum: number) {
     return parseInt(String(Math.random() * (endNum - startNum) + startNum));
 }
+
+/**
+ * 使用示例：
+ * 
+ * 例如想要 4-13 之间的随机数，要写成：rnd(4, 14)
+ * rnd(4, 14);
+ */
 
 /**
  * 鼠标滚轮事件
@@ -93,6 +123,20 @@ function addMouseWheel(obj: HTMLElement, fn: Function): void {
 }
 
 /**
+ * 使用示例：
+ * 
+ * const oDiv = document.getElementById('div1');
+ * addMouseWheel(oDiv, (bDown) => {
+ *      if (bDown) {
+ *          // 鼠标上
+ *      } else {
+ *          // 鼠标下
+ *      }
+ * });
+ */
+
+
+/**
  * 判断对象是否为空，true -> json为空
  * @param json json 对象
  */
@@ -104,17 +148,33 @@ function isJsonEmpty(json: Object): boolean {
 }
 
 /**
- * 获取文件类型
- * @param filePath 文件路径
+ * 使用示例：
+ * 
+ * const json = {};
+ * isJsonEmpty(json);  
+ * 
+ * 输出结果：
+ * true
  */
-function getFileType(filePath: string): string {
-    const cuttingPoint = filePath.lastIndexOf('.');
+
+/**
+ * 获取文件类型
+ * @param file 文件对象
+ */
+function getFileType(file: string): string {
+    const cuttingPoint = file.lastIndexOf('.');
     if (cuttingPoint == -1) {
         return 'unknow';
     } else {
-        return filePath.substring(cuttingPoint + 1);
+        return file.substring(cuttingPoint + 1);
     }
 }
+
+/**
+ * 使用示例：
+ * 
+ * getFileType(文件对象);
+ */
 
 /**
  * 添加样式
@@ -262,8 +322,11 @@ function stringCut(value: string, len: number = 10): string {
 
 /**
  * 使用示例：
+ * 
  * stringCut('我我我我我我我我我我我我我我我我我我');
+ * 
  * 输出结果：
+ * 
  * 我我我我我我我我我我...
  */
 
@@ -304,9 +367,12 @@ function thousandsFormat(num: any): string {
 
   /**
    * 使用示例：
+   * 
    * thousandsFormat(1234567890456);
    * thousandsFormat('1234567890456');
+   * 
    * 输出结果：
+   * 
    * 1,234,567,890,456.00
    * 1,234,567,890,456.00
    */
