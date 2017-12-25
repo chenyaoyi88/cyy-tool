@@ -1,22 +1,23 @@
+"use strict";
 /*
- * @Author: chenyaoyi 
- * @Date: 2017-12-25 11:41:11 
+ * @Author: chenyaoyi
+ * @Date: 2017-12-25 11:41:11
  * @Last Modified by: chenyaoyi
- * @Last Modified time: 2017-12-25 17:55:21
+ * @Last Modified time: 2017-12-25 17:49:46
  */
-
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path='index.d.ts' />
-
 /**
  * DOM 元素全部加载完成
  * @param fn 成功回调
  */
-function domReady(fn: Function): void {
+function domReady(fn) {
     if (document.addEventListener) {
         document.addEventListener('DOMContentLoaded', function () {
             fn && fn();
         }, false);
-    } else {
+    }
+    else {
         document['attachEvent']('onreadystatechange', function () {
             if (document.readyState == 'complete') {
                 fn && fn();
@@ -24,30 +25,31 @@ function domReady(fn: Function): void {
         });
     }
 }
-
+exports.domReady = domReady;
 /**
  * 使用示例：
- * 
+ *
  * domReady(() => {
  *      // 要处理逻辑
  * });
  */
-
 /**
  * 确保页面中 js/css 完全加载
  * @param type 文件类型
  * @param url url
  * @param fnSucc 加载之后的回调函数
  */
-function loadFile(type: string = 'script', url: string, fnSucc: Function): void {
-    const oTag: HTMLScriptElement | HTMLLinkElement | any = document.createElement(type);
+function loadFile(type, url, fnSucc) {
+    if (type === void 0) { type = 'script'; }
+    var oTag = document.createElement(type);
     if (type == 'script') {
         oTag.src = url;
-    } else {
+    }
+    else {
         oTag.rel = 'stylesheet';
         oTag.href = url;
     }
-    const oHead: HTMLHeadElement = document.getElementsByTagName('head')[0];
+    var oHead = document.getElementsByTagName('head')[0];
     oHead.appendChild(oTag);
     oTag.onload = oTag.onreadystatechange = function () {
         if (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete') {
@@ -55,74 +57,69 @@ function loadFile(type: string = 'script', url: string, fnSucc: Function): void 
         }
     };
 }
-
 /**
  * 使用示例：
- * 
+ *
  * loadFile('script', 'https://www.baidu.com/src/xxx.js', () => {
  *      // 要处理逻辑
  * });
  */
-
 /**
  * url 上面获取参数对应的值
  * @param type 要截的值名称
  */
-function getQueryString(name: string): string | null {
-    const reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
-    const r = window.location.search.substr(1).match(reg);
+function getQueryString(name) {
+    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+    var r = window.location.search.substr(1).match(reg);
     if (r != null) {
         return window['unescape'](r[2]);
-    };
+    }
+    ;
     return null;
 }
-
 /**
  * 使用示例：
- * 
+ *
  * getQueryString('script', 'https://www.baidu.com/src/xxx.js');
  */
-
-
 /**
  * 生成一个范围内随机一个数字
- * 
+ * 例如想要 4-13 之间的随机数，要写成：rnd(4,14)
  * @param startNum 开始数字
  * @param endNum 结束数字
  */
-function getRandomNum(startNum: number, endNum: number) {
+function getRandomNum(startNum, endNum) {
     return parseInt(String(Math.random() * (endNum - startNum) + startNum));
 }
-
 /**
  * 使用示例：
- * 
+ *
  * 例如想要 4-13 getRandomNum(4, 14)
  * getRandomNum(4, 14);
  */
-
 /**
  * 鼠标滚轮事件
  * @param obj 响应鼠标滚轮的元素
  * @param fn 鼠标滚轮后的回调函数
  */
-function fnMouseWheel(obj: HTMLElement, fn: Function): void {
+function fnMouseWheel(obj, fn) {
     if (window.navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
         obj.addEventListener('DOMMouseScroll', fnWheel, false);
-    } else {
+    }
+    else {
         obj.onmousewheel = fnWheel;
     }
-
     /**
      * 鼠标滚轮事件
      * @param ev 事件对象
      */
-    function fnWheel(ev: Event): boolean {
-        const oEvent: any = ev || window.event;
-        let bDown = true;
+    function fnWheel(ev) {
+        var oEvent = ev || window.event;
+        var bDown = true;
         if (oEvent.wheelDelta) {
             bDown = oEvent.wheelDelta > 0 ? false : true;
-        } else {
+        }
+        else {
             bDown = oEvent.detail > 0 ? true : false;
         }
         fn && fn(bDown);
@@ -130,10 +127,9 @@ function fnMouseWheel(obj: HTMLElement, fn: Function): void {
         return false;
     }
 }
-
 /**
  * 使用示例：
- * 
+ *
  * const oDiv = document.getElementById('div1');
  * addMouseWheel(oDiv, (bDown) => {
  *      if (bDown) {
@@ -143,70 +139,66 @@ function fnMouseWheel(obj: HTMLElement, fn: Function): void {
  *      }
  * });
  */
-
 /**
  * 判断对象是否为空，true -> json为空
  * @param json json 对象
  */
-function isJsonEmpty(json: Object): boolean {
-    for (let name in json) {
+function isJsonEmpty(json) {
+    for (var name_1 in json) {
         // 如果 json 有数据则会进入循环
         return false;
     }
     return true;
 }
-
+function isArray(obj) {
+    return Object.prototype.toString.call(obj) === '[object Array]';
+}
 /**
  * 使用示例：
- * 
+ *
  * const json = {};
- * isJsonEmpty(json);  
- * 
+ * isJsonEmpty(json);
+ *
  * 输出结果：
  * true
  */
-
-function isArray(obj): boolean {
-    return Object.prototype.toString.call(obj) === '[object Array]';
-}
-
 /**
  * 获取文件类型
  * @param file 文件对象
  */
-function getFileType(file: string): string {
-    const cuttingPoint = file.lastIndexOf('.');
+function getFileType(file) {
+    var cuttingPoint = file.lastIndexOf('.');
     if (cuttingPoint == -1) {
         return 'unknow';
-    } else {
+    }
+    else {
         return file.substring(cuttingPoint + 1);
     }
 }
-
 /**
  * 使用示例：
- * 
+ *
  * var file = 文件对象;
  * getFileType(file);
- * 
+ *
  * 输出结果：
  * jpg
  */
-
 /**
  * 操控样式
  */
-const fnClass = {
+var fnClass = {
     /**
      * 样式是否存在
      * @param obj HTML元素
      * @param sClass 样式名
      */
-    hasClass: function (obj: HTMLElement, sClass: string): boolean {
+    hasClass: function (obj, sClass) {
         if (obj.classList.contains) {
             return obj.classList.contains(sClass);
-        } else {
-            const reg = new RegExp('\\b' + sClass + '\\b');
+        }
+        else {
+            var reg = new RegExp('\\b' + sClass + '\\b');
             return reg.test(obj.className);
         }
     },
@@ -215,16 +207,18 @@ const fnClass = {
      * @param obj HTML元素
      * @param sClass 样式名
      */
-    addClass: function (obj: HTMLElement, sClass: string): Object {
+    addClass: function (obj, sClass) {
         if (obj.className) {
             if (!this.hasClass(obj, sClass)) {
                 if (obj.classList.add) {
                     obj.classList.add(sClass);
-                } else {
+                }
+                else {
                     obj.className += ' ' + sClass;
                 }
             }
-        } else {
+        }
+        else {
             obj.className = sClass;
         }
         return obj;
@@ -234,11 +228,12 @@ const fnClass = {
      * @param obj HTML元素
      * @param sClass 样式名
      */
-    removeClass: function (obj: HTMLElement, sClass: string): Object {
+    removeClass: function (obj, sClass) {
         if (obj.classList.remove) {
             obj.classList.remove(sClass);
-        } else {
-            const reg = new RegExp('\\b' + sClass + '\\b');
+        }
+        else {
+            var reg = new RegExp('\\b' + sClass + '\\b');
             if (this.hasClass(obj, sClass)) {
                 obj.className = obj.className.replace(reg, '').replace(/^\s+|\s+$/g, '').replace(/\s+/g, '');
             }
@@ -246,37 +241,38 @@ const fnClass = {
         return obj;
     }
 };
-
 /**
  * 设置 css3 的样式
  * @param obj HTML元素
  * @param name 要设置的样式名称
  * @param value 要设置的样式值
  */
-function setCss3Style(obj: HTMLElement, name: string, value: string): void {
-    const str = name.charAt(0).toUpperCase() + name.substring(1);
+function setCss3Style(obj, name, value) {
+    var str = name.charAt(0).toUpperCase() + name.substring(1);
     obj.style['Webkit' + str] = value;
     obj.style['Moz' + str] = value;
     obj.style['ms' + str] = value;
     obj.style['O' + str] = value;
     obj.style[name] = value;
-};
-
+}
+;
 /**
  * 字符串间隔（字符串四位间隔）
- * 
+ *
  * @param {string} type 类型 phone: 手机，bankcard: 银行卡
  * @param {string} val 要转换的字符串
  * @returns {string} 返回处理完的字符串
  */
-function stringSpacing(type: string, val: string): string {
+function stringSpacing(type, val) {
     val = val.replace(/\s/g, '').replace(/(.{4})/g, '$1 ');
     if (type === 'bankcard') {
         val = val.replace(/\s/g, '').replace(/(.{4})/g, '$1 ');
-    } else if (type === 'phone') {
+    }
+    else if (type === 'phone') {
         if (val.length < 3) {
             val = val.replace(/\s/g, '');
-        } else {
+        }
+        else {
             val = val.substring(0, 3) + ' ' + val.substring(3).replace(/\s/g, '').replace(/(.{4})/g, '$1 ');
         }
     }
@@ -285,111 +281,113 @@ function stringSpacing(type: string, val: string): string {
     }
     return val;
 }
-
 /**
  * 使用示例：
- * 
+ *
  * stringSpacing('bankcard': '6225888888888888');
  * stringSpacing('phone': '15912341234');
- * 
+ *
  * 输出结果：
- * 
+ *
  * 6225 8888 8888 8888
  * 159 1234 1234
  */
-
 /**
  * 时间格式转换
- * 
+ *
  * @param {(string | number)} time 时间戳
  * @param {string} [symbol='.'] 间隔符号
  * @returns {string} YYYY.MM.DD hh:mm:ss
  */
-function formatDate(time: string | number, symbol: string = '.'): string {
+function formatDate(time, symbol) {
+    if (symbol === void 0) { symbol = '.'; }
     if (time) {
-        const newTime = typeof time === 'number' ? time : parseInt(time);
-        const date = new Date(newTime);
+        var newTime = typeof time === 'number' ? time : parseInt(time);
+        var date = new Date(newTime);
         return date.getFullYear() + symbol + formatSingleNum(date.getMonth() + 1) + symbol + formatSingleNum(date.getDate()) +
             ' ' + formatSingleNum(date.getHours()) + ':' + formatSingleNum(date.getMinutes()) + ':' + formatSingleNum(date.getSeconds());
-    } else {
+    }
+    else {
         return '----.--.-- --:--:--';
     }
 }
-
 /**
  * 将小于10的数字前面加上'0'
- * 
- * @param {*} num 
- * @returns {(string | number)} 
+ *
+ * @param {*} num
+ * @returns {(string | number)}
  */
-function formatSingleNum(num: any): string | number {
-    if (num === 'undefined' || num === undefined || num === '' || num === null) return;
-
-    const newNum = typeof num === 'number' ? num : parseInt(num);
+function formatSingleNum(num) {
+    if (num === 'undefined' || num === undefined || num === '' || num === null)
+        return;
+    var newNum = typeof num === 'number' ? num : parseInt(num);
     return newNum > 9 ? newNum : ('0' + newNum);
 }
-
 /**
  * 字符串截取（多余的显示省略号）
- * 
+ *
  * @param {string} value 要截取的字符串
  * @param {number} [len=10] 截取的长度
  * @returns {string} 返回处理完的字符串
  */
-function stringCut(value: string, len: number = 10): string {
-    const v: string = String(value);
+function stringCut(value, len) {
+    if (len === void 0) { len = 10; }
+    var v = String(value);
     if (v) {
         if (v.length === 0) {
             return '';
-        } else if (v.length < len) {
+        }
+        else if (v.length < len) {
             return v;
-        } else {
-            const arr = v.split('');
+        }
+        else {
+            var arr = v.split('');
             arr.length = len;
             return arr.join('') + '...';
         }
-    } else {
+    }
+    else {
         return v;
     }
 }
-
 /**
  * 使用示例：
- * 
+ *
  * stringCut('我我我我我我我我我我我我我我我我我我');
- * 
+ *
  * 输出结果：
- * 
+ *
  * 我我我我我我我我我我...
  */
-
 /**
  * 数值添加千分位处理
- * 
+ *
  * @param {*} num 需要处理的字符串或数字
  * @returns {string} 返回处理完的字符串
  */
-function thousandsFormat(num: any): string {
+function thousandsFormat(num) {
     // 1.先去除空格,判断是否空值和非数
     num = num + '';
     // 去除空格
     num = num.replace(/[ ]/g, '');
     if (!/\d/.test(num) || isNaN(num)) {
         return null;
-    };
+    }
+    ;
     // 2.针对是否有小数点，分情况处理
-    const index: number = num.indexOf('.');
+    var index = num.indexOf('.');
     if (index === -1) {
         // 无小数点
-        const reg: RegExp = /(-?\d+)(\d{3})/;
+        var reg = /(-?\d+)(\d{3})/;
         while (reg.test(num)) {
             num = num.replace(reg, '$1,$2');
         }
         num += '.00';
-    } else {
-        let intPart: string = num.substring(0, index);
-        const pointPart: string = num.substring(index + 1, num.length);
-        const reg: RegExp = /(-?\d+)(\d{3})/;
+    }
+    else {
+        var intPart = num.substring(0, index);
+        var pointPart = num.substring(index + 1, num.length);
+        var reg = /(-?\d+)(\d{3})/;
         while (reg.test(intPart)) {
             intPart = intPart.replace(reg, '$1,$2');
         }
@@ -397,23 +395,21 @@ function thousandsFormat(num: any): string {
     }
     return num;
 }
-
 /**
  * 使用示例：
- * 
+ *
  * thousandsFormat(1234567890456);
  * thousandsFormat('1234567890456');
- * 
+ *
  * 输出结果：
- * 
+ *
  * 1,234,567,890,456.00
  * 1,234,567,890,456.00
  */
-
 /**
  * 判断浏览器
  */
-const fnBrowser = {
+var fnBrowser = {
     ua: window.navigator.userAgent.toLowerCase(),
     /**
      * 判断是移动端还是PC端
@@ -424,10 +420,11 @@ const fnBrowser = {
     /**
      * 判断是否微信
      */
-    isWeixin: function (): boolean {
+    isWeixin: function () {
         if (this.ua.match(/MicroMessenger/i) && this.ua.match(/MicroMessenger/i).length > 0) {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     },
@@ -448,66 +445,63 @@ const fnBrowser = {
      */
     isWebView: function () { }
 };
-
-function json2url(json: { t: number }): string {
+function json2url(json) {
     json.t = Math.random();
-    let arr = [];
-    for (let name in json) {
+    var arr = [];
+    for (var name in json) {
         arr.push(name + '=' + encodeURIComponent(json[name]));
     }
     return arr.join('&');
 }
-
 /**
  * HTTP 请求
  */
-const http = {
-    get: function (url: string, params: any = {}, options?: Ajax_Options): Promise<any> {
-        const xhr = new XMLHttpRequest();
-        let timer = null;
-        for (let pro in options.headers) {
+var http = {
+    get: function (url, params, options) {
+        if (params === void 0) { params = {}; }
+        var xhr = new XMLHttpRequest();
+        var timer = null;
+        for (var pro in options.headers) {
             xhr.setRequestHeader(pro, options.headers[pro]);
-        };
-
+        }
+        ;
         xhr.open('GET', url + '?' + json2url(params), true);
         xhr.send();
-
-        return this.hanlde(xhr, timer, options);
-
+        return this.hanlde(xhr, timer);
     },
-    post: function (url: string, params: any = {}, options?: Ajax_Options): Promise<any>  {
-        const xhr = new XMLHttpRequest();
-        let timer = null;
-        for (let pro in options.headers) {
+    post: function (url, params, options) {
+        if (params === void 0) { params = {}; }
+        var xhr = new XMLHttpRequest();
+        var timer = null;
+        for (var pro in options.headers) {
             xhr.setRequestHeader(pro, options.headers[pro]);
-        };
-        
+        }
+        ;
         xhr.open('POST', url, true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
         if (typeof params === 'string') {
             xhr.send(params);
-        } else {
+        }
+        else {
             xhr.send(json2url(params));
         }
-        
         return this.hanlde(xhr, timer, options);
     },
-    hanlde: function (xhr: XMLHttpRequest, timer: any, options?: Ajax_Options) {
-        return new Promise((resolve, reject) => {
+    hanlde: function (xhr, timer, options) {
+        return new Promise(function (resolve, reject) {
             xhr.onreadystatechange = function () {
                 // 完成
                 if (xhr.readyState === 4) {
                     clearTimeout(timer);
                     if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
                         resolve(JSON.parse(xhr.responseText));
-                    } else {
+                    }
+                    else {
                         // 失败
                         reject('error');
                     }
                 }
             };
-
             if (options.timeout) {
                 timer = setTimeout(function () {
                     reject('timeout');
@@ -515,10 +509,75 @@ const http = {
                     xhr.abort();
                 }, options.timeout);
             }
-
         });
-    }
+    },
+    handleError: function () { }
 };
-
-
-export { domReady, http };
+exports.http = http;
+/**
+ * @description 自己封装的简单 ajax
+ * @param {*Object} options ajax 选项
+ * @returns {Promise}
+ * url 提交的 url
+ * data 提交的数据对象
+ * timeout 请求超时时间
+ * header 需要设置的请求头
+ * success 请求成功回调
+ * error 请求失败回调
+ */
+function ajax(options) {
+    // options = options || {};
+    if (!options.url) {
+        return;
+    }
+    options.data = options.data || {};
+    options.type = options.type || 'GET';
+    options.timeout = options.timeout || 0;
+    options.headers = options.headers || {};
+    var xhr = null;
+    var timer = null;
+    //1 创建
+    xhr = new XMLHttpRequest();
+    if (options.type.toUpperCase() === 'GET') {
+        xhr.open('GET', options.url + '?' + json2url(options.data), true);
+        xhr.send();
+    }
+    else {
+        xhr.open('POST', options.url, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        for (var pro in options.headers) {
+            xhr.setRequestHeader(pro, options.headers[pro]);
+        }
+        if (typeof options.data === 'string') {
+            xhr.send(options.data);
+        }
+        else {
+            xhr.send(json2url(options.data));
+        }
+    }
+    return new Promise(function (resolve, reject) {
+        xhr.onreadystatechange = function () {
+            // 完成
+            if (xhr.readyState === 4) {
+                clearTimeout(timer);
+                // 成功
+                if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
+                    options.success && options.success(JSON.parse(xhr.responseText));
+                    resolve(JSON.parse(xhr.responseText));
+                }
+                else {
+                    //失败
+                    options.error && options.error('error');
+                    reject('error');
+                }
+            }
+        };
+        if (options.timeout) {
+            timer = setTimeout(function () {
+                reject('timeout');
+                // 终止
+                xhr.abort();
+            }, options.timeout);
+        }
+    });
+}

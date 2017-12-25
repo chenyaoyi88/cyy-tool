@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        // 如何处理模块，这里使用node的io模块去处理
+        "moduleResolution": "node",
+        "sourceMap": false,
+        "noImplicitAny": false,
+        "module": "commonjs",
+        "target": "es5",
+        "lib": [
+            "es6",
+            "dom"
+        ],
+    },
+    "include": [
+        "*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}
