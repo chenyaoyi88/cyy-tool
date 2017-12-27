@@ -1,13 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
+
 <body>
-    
-    <script src="test.js"></script>
+
+    <div id="div1"></div>
+    <script>
+        // setTimeCountDown('div1', new Date().getTime(), 1523000000000);
+        setTimeCountDown('div1', {
+            // currentTimestamp: new Date().getTime(),
+            targetTimestamp: 1523000000000,
+            targetTimeList: {
+                year: 2017,
+                month: 12,
+                day: 26,
+                hour: 13
+            }
+        });
+
+        // showCountDown('#h1',2017,12,14);
+
+        // function setTimeCountDown(id, options) {
+            
+        function setTimeCountDown(id, currentTimestamp, targetTimestamp) {
+            const oShowTime = document.querySelector('#' + id);
+
+            if (!oShowTime) return;
+
+            const oCurrentTime = new Date(options.currentTimestamp) || new Date();
+            const oTargetTime = new Date(options.targetTimestamp);
+            const oYear = oTargetTime.getFullYear();
+            const oMonth = oTargetTime.getMonth();
+            const oDay = oTargetTime.getDay();
+            const oHour = oTargetTime.getHours();
+            const oMin = oTargetTime.getMinutes();
+            const oSec = oTargetTime.getSeconds();
+            const oMilliSec = oTargetTime.getMilliseconds();
+            oCurrentTime.setFullYear(oYear, oMonth, oDay);
+            oCurrentTime.setHours(oHour, oMin, oSec, oMilliSec);
+        
+            countDown();
+            setInterval(countDown, 1000);
+        
+            function countDown() {
+                let x = parseInt(String((oCurrentTime.getTime() - new Date().getTime()) / 1000));
+                const d = parseInt(String(x / 86400));
+                x %= 86400;
+                const h = parseInt(String(x / 3600));
+                x %= 3600;
+                const m = parseInt(String(x / 60));
+                x %= 60;
+                oShowTime && (oShowTime.innerHTML = `还有${formatSingleNum(d)}天${formatSingleNum(h)}小时${formatSingleNum(m)}分${formatSingleNum(x)}秒`);
+            }
+        }
+
+        function formatSingleNum(num) {
+            if (num === 'undefined' || num === undefined || num === '' || num === null) return;
+
+            const newNum = typeof num === 'number' ? num : parseInt(num);
+            return newNum > 9 ? newNum : ('0' + newNum);
+        }
+    </script>
 </body>
+
 </html>

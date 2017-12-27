@@ -2,7 +2,7 @@
  * @Author: chenyaoyi 
  * @Date: 2017-12-25 11:41:11 
  * @Last Modified by: chenyaoyi
- * @Last Modified time: 2017-12-25 17:55:21
+ * @Last Modified time: 2017-12-26 09:23:55
  */
 
 /// <reference path='index.d.ts' />
@@ -26,26 +26,24 @@ function domReady(fn: Function): void {
 }
 
 /**
- * 使用示例：
- * 
- * domReady(() => {
- *      // 要处理逻辑
- * });
- */
-
-/**
  * 确保页面中 js/css 完全加载
- * @param type 文件类型
+ * 
  * @param url url
  * @param fnSucc 加载之后的回调函数
  */
-function loadFile(type: string = 'script', url: string, fnSucc: Function): void {
+
+function loadFile(url: string, fnSucc: Function): any {
+    const type: string = getFileType(url);
+    if (type === 'unknow') return type;
     const oTag: HTMLScriptElement | HTMLLinkElement | any = document.createElement(type);
-    if (type == 'script') {
-        oTag.src = url;
-    } else {
-        oTag.rel = 'stylesheet';
-        oTag.href = url;
+    switch (type) {
+        case 'js':
+            oTag.src = url;
+            break;
+        case 'css':
+            oTag.rel = 'stylesheet';
+            oTag.href = url;
+            break;
     }
     const oHead: HTMLHeadElement = document.getElementsByTagName('head')[0];
     oHead.appendChild(oTag);
@@ -57,16 +55,9 @@ function loadFile(type: string = 'script', url: string, fnSucc: Function): void 
 }
 
 /**
- * 使用示例：
- * 
- * loadFile('script', 'https://www.baidu.com/src/xxx.js', () => {
- *      // 要处理逻辑
- * });
- */
-
-/**
  * url 上面获取参数对应的值
- * @param type 要截的值名称
+ * 
+ * @param name 要截的值名称
  */
 function getQueryString(name: string): string | null {
     const reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
@@ -78,28 +69,27 @@ function getQueryString(name: string): string | null {
 }
 
 /**
- * 使用示例：
+ * 返回一个在特点范围内的随机数字
  * 
- * getQueryString('script', 'https://www.baidu.com/src/xxx.js');
- */
-
-
-/**
- * 生成一个范围内随机一个数字
- * 
- * @param startNum 开始数字
- * @param endNum 结束数字
+ * @param startNum 开始
+ * @param endNum 结束
  */
 function getRandomNum(startNum: number, endNum: number) {
-    return parseInt(String(Math.random() * (endNum - startNum) + startNum));
+    return parseInt(String(Math.random() * (endNum + 1 - startNum) + startNum));
 }
 
 /**
- * 使用示例：
- * 
- * 例如想要 4-13 getRandomNum(4, 14)
- * getRandomNum(4, 14);
+ * 获取文件类型
+ * @param file 文件对象
  */
+function getFileType(file: string): string {
+    const cuttingPoint = file.lastIndexOf('.');
+    if (cuttingPoint == -1) {
+        return 'unknow';
+    } else {
+        return file.substring(cuttingPoint + 1);
+    }
+}
 
 /**
  * 鼠标滚轮事件
@@ -131,18 +121,6 @@ function fnMouseWheel(obj: HTMLElement, fn: Function): void {
     }
 }
 
-/**
- * 使用示例：
- * 
- * const oDiv = document.getElementById('div1');
- * addMouseWheel(oDiv, (bDown) => {
- *      if (bDown) {
- *          // 鼠标滚轮往上滚的时候触发回调
- *      } else {
- *          // 鼠标滚轮往下滚的时候触发回调
- *      }
- * });
- */
 
 /**
  * 判断对象是否为空，true -> json为空
@@ -156,43 +134,9 @@ function isJsonEmpty(json: Object): boolean {
     return true;
 }
 
-/**
- * 使用示例：
- * 
- * const json = {};
- * isJsonEmpty(json);  
- * 
- * 输出结果：
- * true
- */
-
 function isArray(obj): boolean {
     return Object.prototype.toString.call(obj) === '[object Array]';
 }
-
-/**
- * 获取文件类型
- * @param file 文件对象
- */
-function getFileType(file: string): string {
-    const cuttingPoint = file.lastIndexOf('.');
-    if (cuttingPoint == -1) {
-        return 'unknow';
-    } else {
-        return file.substring(cuttingPoint + 1);
-    }
-}
-
-/**
- * 使用示例：
- * 
- * var file = 文件对象;
- * getFileType(file);
- * 
- * 输出结果：
- * jpg
- */
-
 /**
  * 操控样式
  */
@@ -263,6 +207,44 @@ function setCss3Style(obj: HTMLElement, name: string, value: string): void {
 };
 
 /**
+ * 设置倒计时
+ * 
+ * @param id HTML元素的 ID
+ * @param currentTimestamp 当前时间戳
+ * @param targetTimestamp 目标时间时间戳
+ */
+function setTimeCountDown(id, currentTimestamp, targetTimestamp) {
+    const oShowTime = document.querySelector('#' + id);
+    if (!oShowTime) return;
+    const regTime = /^\d{13}$/;
+    if (!regTime.test(currentTimestamp)) return;
+    if (!regTime.test(targetTimestamp)) return;
+
+    const oTarget = new Date(currentTimestamp) || new Date();
+    const oTargetTime = new Date(targetTimestamp);
+    const oYear = oTargetTime.getFullYear();
+    const oMonth = oTargetTime.getMonth();
+    const oDay = oTargetTime.getDay();
+    oTarget.setFullYear(oYear, oMonth, oDay);
+    oTarget.setHours(0, 0, 0);
+
+    countDown();
+    setInterval(countDown, 1000);
+
+    function countDown() {
+        let x = parseInt(String((oTarget.getTime() - new Date().getTime()) / 1000));
+        const d = parseInt(String(x / 86400));
+        x %= 86400;
+        const h = parseInt(String(x / 3600));
+        x %= 3600;
+        const m = parseInt(String(x / 60));
+        x %= 60;
+        oShowTime && (oShowTime.innerHTML = `还有${formatSingleNum(d)}天${formatSingleNum(h)}小时${formatSingleNum(m)}分${formatSingleNum(x)}秒`);
+    }
+}
+
+
+/**
  * 字符串间隔（字符串四位间隔）
  * 
  * @param {string} type 类型 phone: 手机，bankcard: 银行卡
@@ -285,18 +267,6 @@ function stringSpacing(type: string, val: string): string {
     }
     return val;
 }
-
-/**
- * 使用示例：
- * 
- * stringSpacing('bankcard': '6225888888888888');
- * stringSpacing('phone': '15912341234');
- * 
- * 输出结果：
- * 
- * 6225 8888 8888 8888
- * 159 1234 1234
- */
 
 /**
  * 时间格式转换
@@ -354,22 +324,13 @@ function stringCut(value: string, len: number = 10): string {
 }
 
 /**
- * 使用示例：
- * 
- * stringCut('我我我我我我我我我我我我我我我我我我');
- * 
- * 输出结果：
- * 
- * 我我我我我我我我我我...
- */
-
-/**
  * 数值添加千分位处理
  * 
  * @param {*} num 需要处理的字符串或数字
  * @returns {string} 返回处理完的字符串
+ * 
  */
-function thousandsFormat(num: any): string {
+function formatThousands(num: any): string {
     // 1.先去除空格,判断是否空值和非数
     num = num + '';
     // 去除空格
@@ -397,18 +358,6 @@ function thousandsFormat(num: any): string {
     }
     return num;
 }
-
-/**
- * 使用示例：
- * 
- * thousandsFormat(1234567890456);
- * thousandsFormat('1234567890456');
- * 
- * 输出结果：
- * 
- * 1,234,567,890,456.00
- * 1,234,567,890,456.00
- */
 
 /**
  * 判断浏览器
@@ -449,7 +398,12 @@ const fnBrowser = {
     isWebView: function () { }
 };
 
-function json2url(json: { t: number }): string {
+/**
+ * json 转成 url 
+ * 
+ * @param json json对象
+ */
+function jsonTourl(json: { t: number }): string {
     json.t = Math.random();
     let arr = [];
     for (let name in json) {
@@ -457,6 +411,30 @@ function json2url(json: { t: number }): string {
     }
     return arr.join('&');
 }
+
+// function showCountDown(id, year, month, day) {
+
+//     const oShowTime = document.querySelector(id);
+//     var oTarget = new Date();
+//     oTarget.setFullYear(year, month, day);
+//     oTarget.setHours(0, 0, 0);
+
+//     countDown();
+//     setInterval(countDown, 1000);
+
+//     function countDown() {
+//         var x = parseInt((oTarget.getTime() - new Date().getTime()) / 1000);
+
+//         var d = parseInt(x / 86400);
+//         x %= 86400;
+//         var h = parseInt(x / 3600);
+//         x %= 3600;
+//         var m = parseInt(x / 60);
+//         x %= 60;
+
+//         oShowTime.innerHTML = `还有${d}天${h}小时${m}分${x}秒`;
+//     }
+// }
 
 /**
  * HTTP 请求
@@ -469,28 +447,28 @@ const http = {
             xhr.setRequestHeader(pro, options.headers[pro]);
         };
 
-        xhr.open('GET', url + '?' + json2url(params), true);
+        xhr.open('GET', url + '?' + jsonTourl(params), true);
         xhr.send();
 
         return this.hanlde(xhr, timer, options);
 
     },
-    post: function (url: string, params: any = {}, options?: Ajax_Options): Promise<any>  {
+    post: function (url: string, params: any = {}, options?: Ajax_Options): Promise<any> {
         const xhr = new XMLHttpRequest();
         let timer = null;
         for (let pro in options.headers) {
             xhr.setRequestHeader(pro, options.headers[pro]);
         };
-        
+
         xhr.open('POST', url, true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
         if (typeof params === 'string') {
             xhr.send(params);
         } else {
-            xhr.send(json2url(params));
+            xhr.send(jsonTourl(params));
         }
-        
+
         return this.hanlde(xhr, timer, options);
     },
     hanlde: function (xhr: XMLHttpRequest, timer: any, options?: Ajax_Options) {
@@ -520,5 +498,23 @@ const http = {
     }
 };
 
-
-export { domReady, http };
+export {
+    domReady,
+    loadFile,
+    getFileType,
+    getQueryString,
+    getRandomNum,
+    fnMouseWheel,
+    isJsonEmpty,
+    isArray,
+    fnClass,
+    fnBrowser,
+    setCss3Style,
+    stringSpacing,
+    formatDate,
+    formatSingleNum,
+    formatThousands,
+    stringCut,
+    jsonTourl,
+    http
+};
