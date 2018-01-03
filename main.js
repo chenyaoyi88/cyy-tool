@@ -1,9 +1,93 @@
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
+
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+__export(__webpack_require__(1));
+__export(__webpack_require__(2));
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 /*
  * @Author: chenyaoyi
  * @Date: 2017-12-25 11:41:11
  * @Last Modified by: chenyaoyi
- * @Last Modified time: 2018-01-03 17:52:55
+ * @Last Modified time: 2018-01-03 18:18:16
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path='index.d.ts' />
@@ -33,10 +117,10 @@ exports.domReady = domReady;
  * @param fnSucc 加载之后的回调函数
  */
 function loadFile(url, fnSucc) {
-    const type = getFileType(url);
+    var type = getFileType(url);
     if (type === 'unknow')
         return type;
-    const oTag = document.createElement(type);
+    var oTag = document.createElement(type);
     switch (type) {
         case 'js':
             oTag.src = url;
@@ -46,7 +130,7 @@ function loadFile(url, fnSucc) {
             oTag.href = url;
             break;
     }
-    const oHead = document.getElementsByTagName('head')[0];
+    var oHead = document.getElementsByTagName('head')[0];
     oHead.appendChild(oTag);
     oTag.onload = oTag.onreadystatechange = function () {
         if (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete') {
@@ -61,8 +145,8 @@ exports.loadFile = loadFile;
  * @param name 要截的值名称
  */
 function getQueryString(name) {
-    const reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
-    const r = window.location.search.substr(1).match(reg);
+    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+    var r = window.location.search.substr(1).match(reg);
     if (r != null) {
         return window['unescape'](r[2]);
     }
@@ -85,7 +169,7 @@ exports.getRandomNum = getRandomNum;
  * @param file 文件对象
  */
 function getFileType(file) {
-    const cuttingPoint = file.lastIndexOf('.');
+    var cuttingPoint = file.lastIndexOf('.');
     if (cuttingPoint == -1) {
         return 'unknow';
     }
@@ -111,8 +195,8 @@ function fnMouseWheel(obj, fn) {
      * @param ev 事件对象
      */
     function fnWheel(ev) {
-        const oEvent = ev || window.event;
-        let bDown = true;
+        var oEvent = ev || window.event;
+        var bDown = true;
         if (oEvent.wheelDelta) {
             bDown = oEvent.wheelDelta > 0 ? false : true;
         }
@@ -130,7 +214,7 @@ exports.fnMouseWheel = fnMouseWheel;
  * @param json json 对象
  */
 function isJsonEmpty(json) {
-    for (let name in json) {
+    for (var name in json) {
         // 如果 json 有数据则会进入循环
         return false;
     }
@@ -144,7 +228,7 @@ exports.isArray = isArray;
 /**
  * 操控样式
  */
-const fnClass = {
+var fnClass = {
     /**
      * 样式是否存在
      * @param obj HTML元素
@@ -155,7 +239,7 @@ const fnClass = {
             return obj.classList.contains(sClass);
         }
         else {
-            const reg = new RegExp('\\b' + sClass + '\\b');
+            var reg = new RegExp('\\b' + sClass + '\\b');
             return reg.test(obj.className);
         }
     },
@@ -190,7 +274,7 @@ const fnClass = {
             obj.classList.remove(sClass);
         }
         else {
-            const reg = new RegExp('\\b' + sClass + '\\b');
+            var reg = new RegExp('\\b' + sClass + '\\b');
             if (this.hasClass(obj, sClass)) {
                 obj.className = obj.className.replace(reg, '').replace(/^\s+|\s+$/g, '').replace(/\s+/g, '');
             }
@@ -206,7 +290,7 @@ exports.fnClass = fnClass;
  * @param value 要设置的样式值
  */
 function setCss3Style(obj, name, value) {
-    const str = name.charAt(0).toUpperCase() + name.substring(1);
+    var str = name.charAt(0).toUpperCase() + name.substring(1);
     obj.style['Webkit' + str] = value;
     obj.style['Moz' + str] = value;
     obj.style['ms' + str] = value;
@@ -230,6 +314,7 @@ function setCountdown(options) {
     this.sHour = '';
     this.sMin = '';
     this.sSec = '';
+    // 初始化设置
     this.init = function () {
         this.options.serverTimestamp = options.serverTimestamp || new Date().getTime();
         this.options.startTimestamp = options.startTimestamp || 0;
@@ -245,7 +330,7 @@ function setCountdown(options) {
         }
         // 如果填写了 html 元素，则显示在该 html 元素上
         if (this.options.showTimeElement) {
-            const oShowTimeElement = document.querySelectorAll(this.options.showTimeElement);
+            var oShowTimeElement = document.querySelectorAll(this.options.showTimeElement);
             if (oShowTimeElement && oShowTimeElement.length) {
                 this.showTimeElement = oShowTimeElement;
             }
@@ -255,20 +340,21 @@ function setCountdown(options) {
         // 设置时间
         this.setTime();
     };
+    // 设置时间
     this.setTime = function () {
-        const _this = this;
-        const oServerTime = new Date(this.options.serverTimestamp);
-        const oStartTime = new Date(this.options.startTimestamp);
-        const oYear = oStartTime.getFullYear();
-        const oMonth = oStartTime.getMonth() + 1;
-        const oDay = oStartTime.getDay();
-        const oHour = oStartTime.getHours();
-        const oMin = oStartTime.getMinutes();
-        const oSec = oStartTime.getSeconds();
+        var _this = this;
+        var oServerTime = new Date(this.options.serverTimestamp);
+        var oStartTime = new Date(this.options.startTimestamp);
+        var oYear = oStartTime.getFullYear();
+        var oMonth = oStartTime.getMonth() + 1;
+        var oDay = oStartTime.getDay();
+        var oHour = oStartTime.getHours();
+        var oMin = oStartTime.getMinutes();
+        var oSec = oStartTime.getSeconds();
         // 设置活动开始时间：年月日时分秒
         oServerTime.setFullYear(oYear, oMonth, oDay);
         oServerTime.setHours(oHour, oMin, oSec);
-        // 立即执行一次
+        // 时间换算，先立即执行一次
         this.timeRun(oStartTime);
         // 不断使用定时器执行
         this.timer = setInterval(function () {
@@ -280,15 +366,15 @@ function setCountdown(options) {
         // 秒数++，每一秒，秒数+1，代表从服务器时间获取到的时间基础上继续跑
         this.newTimeSecond++;
         // 算出新的时间差
-        let x = parseInt(String((oStartTime.getTime() - new Date(this.newTimeSecond * 1000).getTime()) / 1000));
+        var x = parseInt(String((oStartTime.getTime() - new Date(this.newTimeSecond * 1000).getTime()) / 1000));
         // 剩余天数
-        const d = parseInt(String(x / 86400));
+        var d = parseInt(String(x / 86400));
         x %= 86400;
         // 剩余小时数
-        const h = parseInt(String(x / 3600));
+        var h = parseInt(String(x / 3600));
         x %= 3600;
         // 剩余分钟数
-        const m = parseInt(String(x / 60));
+        var m = parseInt(String(x / 60));
         // 剩余秒数
         x %= 60;
         // 将换算好的时间通过回调函数抛出去，如果需要自定义显示格式，可以从这个回调函数中获取时间
@@ -300,12 +386,12 @@ function setCountdown(options) {
         });
         // 如果填写了 html 元素，而且自定义了 天/时/分/秒 的格式，则按照自定义的格式显示在该 html 元素上
         if (this.showTimeElement && this.showTimeElement.length) {
-            for (let i = 0; i < this.showTimeElement.length; i++) {
-                let sShowTime = '';
-                const sDay = this.sDay ? this.addZero(d) + this.sDay : '';
-                const sHour = this.sHour ? this.addZero(h) + this.sHour : '';
-                const sMin = this.sMin ? this.addZero(m) + this.sMin : '';
-                const sSec = this.sSec ? this.addZero(x) + this.sSec : '';
+            for (var i = 0; i < this.showTimeElement.length; i++) {
+                var sShowTime = '';
+                var sDay = this.sDay ? this.addZero(d) + this.sDay : '';
+                var sHour = this.sHour ? this.addZero(h) + this.sHour : '';
+                var sMin = this.sMin ? this.addZero(m) + this.sMin : '';
+                var sSec = this.sSec ? this.addZero(x) + this.sSec : '';
                 sShowTime = sDay + sHour + sMin + sSec;
                 this.showTimeElement[i] && (this.showTimeElement[i].innerHTML = sShowTime);
             }
@@ -315,7 +401,7 @@ function setCountdown(options) {
             // 时间到，停止倒计时
             clearInterval(this.timer);
             if (this.showTimeElement && this.showTimeElement.length) {
-                for (let i = 0; i < this.showTimeElement.length; i++) {
+                for (var i = 0; i < this.showTimeElement.length; i++) {
                     this.showTimeElement[i] && (this.showTimeElement[i].innerHTML = '00:00:00');
                 }
             }
@@ -328,7 +414,7 @@ function setCountdown(options) {
             return '';
         }
         ;
-        const newNum = typeof num === 'number' ? num : parseInt(num);
+        var newNum = typeof num === 'number' ? num : parseInt(num);
         return newNum > 9 ? newNum : ('0' + newNum);
     };
     this.init();
@@ -367,10 +453,11 @@ exports.setStringSpacing = setStringSpacing;
  * @param {string} [symbol='.'] 间隔符号
  * @returns {string} YYYY.MM.DD hh:mm:ss
  */
-function formatDate(time, symbol = '.') {
+function formatDate(time, symbol) {
+    if (symbol === void 0) { symbol = '.'; }
     if (time) {
-        const newTime = typeof time === 'number' ? time : parseInt(time);
-        const date = new Date(newTime);
+        var newTime = typeof time === 'number' ? time : parseInt(time);
+        var date = new Date(newTime);
         return date.getFullYear() + symbol + formatSingleNum(date.getMonth() + 1) + symbol + formatSingleNum(date.getDate()) +
             ' ' + formatSingleNum(date.getHours()) + ':' + formatSingleNum(date.getMinutes()) + ':' + formatSingleNum(date.getSeconds());
     }
@@ -388,7 +475,7 @@ exports.formatDate = formatDate;
 function formatSingleNum(num) {
     if (num === 'undefined' || num === undefined || num === '' || num === null)
         return;
-    const newNum = typeof num === 'number' ? num : parseInt(num);
+    var newNum = typeof num === 'number' ? num : parseInt(num);
     return newNum > 9 ? newNum : ('0' + newNum);
 }
 exports.formatSingleNum = formatSingleNum;
@@ -399,8 +486,9 @@ exports.formatSingleNum = formatSingleNum;
  * @param {number} [len=10] 截取的长度
  * @returns {string} 返回处理完的字符串
  */
-function stringCut(value, len = 10) {
-    const v = String(value);
+function stringCut(value, len) {
+    if (len === void 0) { len = 10; }
+    var v = String(value);
     if (v) {
         if (v.length === 0) {
             return '';
@@ -409,7 +497,7 @@ function stringCut(value, len = 10) {
             return v;
         }
         else {
-            const arr = v.split('');
+            var arr = v.split('');
             arr.length = len;
             return arr.join('') + '...';
         }
@@ -436,19 +524,19 @@ function formatThousands(num) {
     }
     ;
     // 2.针对是否有小数点，分情况处理
-    const index = num.indexOf('.');
+    var index = num.indexOf('.');
     if (index === -1) {
         // 无小数点
-        const reg = /(-?\d+)(\d{3})/;
+        var reg = /(-?\d+)(\d{3})/;
         while (reg.test(num)) {
             num = num.replace(reg, '$1,$2');
         }
         num += '.00';
     }
     else {
-        let intPart = num.substring(0, index);
-        const pointPart = num.substring(index + 1, num.length);
-        const reg = /(-?\d+)(\d{3})/;
+        var intPart = num.substring(0, index);
+        var pointPart = num.substring(index + 1, num.length);
+        var reg = /(-?\d+)(\d{3})/;
         while (reg.test(intPart)) {
             intPart = intPart.replace(reg, '$1,$2');
         }
@@ -460,7 +548,7 @@ exports.formatThousands = formatThousands;
 /**
  * 判断浏览器
  */
-const fnBrowser = {
+var fnBrowser = {
     ua: window.navigator.userAgent.toLowerCase(),
     /**
      * 判断是移动端还是PC端
@@ -504,8 +592,8 @@ exports.fnBrowser = fnBrowser;
  */
 function jsonTourl(json) {
     json.t = Math.random();
-    let arr = [];
-    for (let name in json) {
+    var arr = [];
+    for (var name in json) {
         arr.push(name + '=' + encodeURIComponent(json[name]));
     }
     return arr.join('&');
@@ -514,11 +602,12 @@ exports.jsonTourl = jsonTourl;
 /**
  * HTTP 请求
  */
-const http = {
-    get: function (url, params = {}, options) {
-        const xhr = new XMLHttpRequest();
-        let timer = null;
-        for (let pro in options.headers) {
+var http = {
+    get: function (url, params, options) {
+        if (params === void 0) { params = {}; }
+        var xhr = new XMLHttpRequest();
+        var timer = null;
+        for (var pro in options.headers) {
             xhr.setRequestHeader(pro, options.headers[pro]);
         }
         ;
@@ -526,10 +615,11 @@ const http = {
         xhr.send();
         return this.hanlde(xhr, timer, options);
     },
-    post: function (url, params = {}, options) {
-        const xhr = new XMLHttpRequest();
-        let timer = null;
-        for (let pro in options.headers) {
+    post: function (url, params, options) {
+        if (params === void 0) { params = {}; }
+        var xhr = new XMLHttpRequest();
+        var timer = null;
+        for (var pro in options.headers) {
             xhr.setRequestHeader(pro, options.headers[pro]);
         }
         ;
@@ -544,7 +634,7 @@ const http = {
         return this.hanlde(xhr, timer, options);
     },
     hanlde: function (xhr, timer, options) {
-        return new Promise((resolve, reject) => {
+        return new Promise(function (resolve, reject) {
             xhr.onreadystatechange = function () {
                 // 完成
                 if (xhr.readyState === 4) {
@@ -569,3 +659,143 @@ const http = {
     }
 };
 exports.http = http;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Validation = /** @class */ (function () {
+    function Validation() {
+    }
+    /**
+     * 检验输入值是否为空
+     * @param {string} val
+     */
+    Validation.prototype.checkEmpty = function (val) {
+        var reg = /\S/;
+        return !reg.test(val) ? false : true;
+    };
+    /**
+     * 检验手机号
+     * @param {string} val - {
+     * 移动号段：
+     * 134 135 136 137 138 139 147 150 151 152 157 158 159 172 178 182 183 184 187 188
+     * 联通号段：
+     * 130 131 132 145 155 156 171 175 176 185 186
+     * 电信号段：
+     * 133 149 153 173 177 180 181 189
+     * 虚拟运营商:
+     * 170
+     * }
+     */
+    Validation.prototype.checkPhone = function (val) {
+        var reg = /^(13[0-9]|14[579]|15[0-35-9]|17[01235678]|18[0-9])[0-9]{8}$/;
+        return !reg.test(val) ? false : true;
+    };
+    /**
+     * 检验是否为纯数字
+     * @param {string} val
+     */
+    Validation.prototype.checkPureNum = function (val) {
+        var reg = /^[0-9]*$/;
+        return !reg.test(val) ? false : true;
+    };
+    /**
+     * 大于等于0的整数或者小数
+     * @param {any} val
+     */
+    Validation.prototype.checkAmountNum = function (val) {
+        var reg = /^(0|0\.\d+|[1-9](\.\d+)?(\d+)?(\.\d+)?)$/g;
+        return !reg.test(val) ? false : true;
+    };
+    /**
+     * 检验val的值的长度是否与len相等
+     * @param {string} val - 值
+     * @param {number} len - 长度
+     */
+    Validation.prototype.checkLengthEqual = function (val, len) {
+        return val.length !== len ? false : true;
+    };
+    /**
+     * 检验val的长度是否在min和max之间
+     * @param {string} val - 值
+     * @param {number} min - 最小长度
+     * @param {number} max - 最大长度
+     */
+    Validation.prototype.checkLength = function (val, min, max) {
+        if (max === undefined) {
+            return (val.length < min) ? false : true;
+        }
+        return (val.length < min || val.length > max) ? false : true;
+    };
+    /**
+     * 格式化千分位
+     * @param {number} val - 值
+     */
+    Validation.prototype.formatThousandth = function (val) {
+        var reg = /(\d)(?=(\d{3})+(?:\.\d+)?$)/g;
+        if (!!val) {
+            return val.replace(reg, '$1,');
+        }
+        else {
+            return val;
+        }
+    };
+    /**
+     * 将千分位的','去掉
+     * @param {number} val - 值
+     */
+    Validation.prototype.parseThousandth = function (val) {
+        return val.replace(/,/g, '');
+    };
+    /**
+     * 检验身份证号
+     * @param {number} val - 值
+     */
+    Validation.prototype.checkCardID = function (val) {
+        var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+        return !reg.test(val) ? false : true;
+    };
+    /**
+     * 校验银行卡号
+     * @param {number} val - 银行卡
+     */
+    Validation.prototype.checkBankCard = function (val) {
+        var reg = /^\d{16}|\d{19}$/;
+        return !reg.test(val) ? false : true;
+    };
+    /**
+     * 校验邮箱
+     * @param val 邮箱
+     */
+    Validation.prototype.checkEmail = function (val) {
+        var reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+        return !reg.test(val) ? false : true;
+    };
+    /**
+     * 检验密码
+     * @param {string} val - 密码字符串，由6-16位的数字和字母混合组成
+     */
+    Validation.prototype.checkPassword = function (val) {
+        var reg = /^(?![^a-zA-Z]+$)(?!\D+$).{6,16}$/g;
+        return !reg.test(val) ? false : true;
+    };
+    /**
+     * 校验中文名
+     * @param val 中文
+     */
+    Validation.prototype.checkUserName = function (val) {
+        var reg = /^[\u4E00-\u9FA5\·\.]+$/g;
+        return reg.test(val) ? true : false;
+    };
+    return Validation;
+}());
+exports.default = new Validation;
+
+
+/***/ })
+/******/ ]);

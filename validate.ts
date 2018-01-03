@@ -1,6 +1,6 @@
 class Validation {
     /**
-     * @description 检验输入值是否为空
+     * 检验输入值是否为空
      * @param {string} val 
      */
     checkEmpty(val: string): boolean {
@@ -9,7 +9,7 @@ class Validation {
     }
 
     /**
-     * @description 检验手机号
+     * 检验手机号
      * @param {string} val - {
      * 移动号段：
      * 134 135 136 137 138 139 147 150 151 152 157 158 159 172 178 182 183 184 187 188
@@ -27,7 +27,7 @@ class Validation {
     }
 
     /**
-     * @description 检验是否为纯数字
+     * 检验是否为纯数字
      * @param {string} val 
      */
     checkPureNum(val: string): boolean {
@@ -36,7 +36,7 @@ class Validation {
     }
 
     /**
-     * @description 大于等于0的整数或者小数
+     * 大于等于0的整数或者小数
      * @param {any} val 
      */
     checkAmountNum(val) {
@@ -45,7 +45,7 @@ class Validation {
     }
 
     /**
-     * @description 检验val的值的长度是否与len相等
+     * 检验val的值的长度是否与len相等
      * @param {string} val - 值
      * @param {number} len - 长度
      */
@@ -54,7 +54,7 @@ class Validation {
     }
 
     /**
-     * @description 检验val的长度是否在min和max之间
+     * 检验val的长度是否在min和max之间
      * @param {string} val - 值
      * @param {number} min - 最小长度
      * @param {number} max - 最大长度
@@ -67,7 +67,7 @@ class Validation {
     }
 
     /**
-     * @description 格式化千分位
+     * 格式化千分位
      * @param {number} val - 值
      */
     formatThousandth(val: string): string {
@@ -80,7 +80,7 @@ class Validation {
     }
 
     /**
-     * @description 将千分位的','去掉
+     * 将千分位的','去掉
      * @param {number} val - 值
      */
     parseThousandth(val: string): string {
@@ -88,7 +88,7 @@ class Validation {
     }
 
     /**
-     * @description 检验身份证号
+     * 检验身份证号
      * @param {number} val - 值
      */
     checkCardID(val: string): boolean {
@@ -97,7 +97,7 @@ class Validation {
     }
 
     /**
-     * @description 检验银行卡号
+     * 校验银行卡号
      * @param {number} val - 银行卡 
      */
     checkBankCard(val: string): boolean {
@@ -105,13 +105,17 @@ class Validation {
         return !reg.test(val) ? false : true;
     }
 
+    /**
+     * 校验邮箱
+     * @param val 邮箱
+     */
     checkEmail(val: string): boolean {
         let reg: RegExp = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
         return !reg.test(val) ? false : true;
     }
 
     /**
-     * @description 检验密码
+     * 检验密码
      * @param {string} val - 密码字符串，由6-16位的数字和字母混合组成
      */
 
@@ -120,6 +124,10 @@ class Validation {
         return !reg.test(val) ? false : true;
     }
 
+    /**
+     * 校验中文名
+     * @param val 中文
+     */
     checkUserName(val: string): boolean {
         let reg: RegExp = /^[\u4E00-\u9FA5\·\.]+$/g;
         return reg.test(val) ? true : false;
