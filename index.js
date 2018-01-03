@@ -3,7 +3,7 @@
  * @Author: chenyaoyi
  * @Date: 2017-12-25 11:41:11
  * @Last Modified by: chenyaoyi
- * @Last Modified time: 2017-12-25 17:49:46
+ * @Last Modified time: 2018-01-03 17:52:55
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path='index.d.ts' />
@@ -27,29 +27,26 @@ function domReady(fn) {
 }
 exports.domReady = domReady;
 /**
- * 使用示例：
- *
- * domReady(() => {
- *      // 要处理逻辑
- * });
- */
-/**
  * 确保页面中 js/css 完全加载
- * @param type 文件类型
+ *
  * @param url url
  * @param fnSucc 加载之后的回调函数
  */
-function loadFile(type, url, fnSucc) {
-    if (type === void 0) { type = 'script'; }
-    var oTag = document.createElement(type);
-    if (type == 'script') {
-        oTag.src = url;
+function loadFile(url, fnSucc) {
+    const type = getFileType(url);
+    if (type === 'unknow')
+        return type;
+    const oTag = document.createElement(type);
+    switch (type) {
+        case 'js':
+            oTag.src = url;
+            break;
+        case 'css':
+            oTag.rel = 'stylesheet';
+            oTag.href = url;
+            break;
     }
-    else {
-        oTag.rel = 'stylesheet';
-        oTag.href = url;
-    }
-    var oHead = document.getElementsByTagName('head')[0];
+    const oHead = document.getElementsByTagName('head')[0];
     oHead.appendChild(oTag);
     oTag.onload = oTag.onreadystatechange = function () {
         if (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete') {
@@ -57,46 +54,46 @@ function loadFile(type, url, fnSucc) {
         }
     };
 }
-/**
- * 使用示例：
- *
- * loadFile('script', 'https://www.baidu.com/src/xxx.js', () => {
- *      // 要处理逻辑
- * });
- */
+exports.loadFile = loadFile;
 /**
  * url 上面获取参数对应的值
- * @param type 要截的值名称
+ *
+ * @param name 要截的值名称
  */
 function getQueryString(name) {
-    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
-    var r = window.location.search.substr(1).match(reg);
+    const reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+    const r = window.location.search.substr(1).match(reg);
     if (r != null) {
         return window['unescape'](r[2]);
     }
     ;
     return null;
 }
+exports.getQueryString = getQueryString;
 /**
- * 使用示例：
+ * 返回一个在特点范围内的随机数字
  *
- * getQueryString('script', 'https://www.baidu.com/src/xxx.js');
- */
-/**
- * 生成一个范围内随机一个数字
- * 例如想要 4-13 之间的随机数，要写成：rnd(4,14)
- * @param startNum 开始数字
- * @param endNum 结束数字
+ * @param startNum 开始
+ * @param endNum 结束
  */
 function getRandomNum(startNum, endNum) {
-    return parseInt(String(Math.random() * (endNum - startNum) + startNum));
+    return parseInt(String(Math.random() * (endNum + 1 - startNum) + startNum));
 }
+exports.getRandomNum = getRandomNum;
 /**
- * 使用示例：
- *
- * 例如想要 4-13 getRandomNum(4, 14)
- * getRandomNum(4, 14);
+ * 获取文件类型
+ * @param file 文件对象
  */
+function getFileType(file) {
+    const cuttingPoint = file.lastIndexOf('.');
+    if (cuttingPoint == -1) {
+        return 'unknow';
+    }
+    else {
+        return file.substring(cuttingPoint + 1);
+    }
+}
+exports.getFileType = getFileType;
 /**
  * 鼠标滚轮事件
  * @param obj 响应鼠标滚轮的元素
@@ -114,8 +111,8 @@ function fnMouseWheel(obj, fn) {
      * @param ev 事件对象
      */
     function fnWheel(ev) {
-        var oEvent = ev || window.event;
-        var bDown = true;
+        const oEvent = ev || window.event;
+        let bDown = true;
         if (oEvent.wheelDelta) {
             bDown = oEvent.wheelDelta > 0 ? false : true;
         }
@@ -127,67 +124,27 @@ function fnMouseWheel(obj, fn) {
         return false;
     }
 }
-/**
- * 使用示例：
- *
- * const oDiv = document.getElementById('div1');
- * addMouseWheel(oDiv, (bDown) => {
- *      if (bDown) {
- *          // 鼠标滚轮往上滚的时候触发回调
- *      } else {
- *          // 鼠标滚轮往下滚的时候触发回调
- *      }
- * });
- */
+exports.fnMouseWheel = fnMouseWheel;
 /**
  * 判断对象是否为空，true -> json为空
  * @param json json 对象
  */
 function isJsonEmpty(json) {
-    for (var name_1 in json) {
+    for (let name in json) {
         // 如果 json 有数据则会进入循环
         return false;
     }
     return true;
 }
+exports.isJsonEmpty = isJsonEmpty;
 function isArray(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
 }
-/**
- * 使用示例：
- *
- * const json = {};
- * isJsonEmpty(json);
- *
- * 输出结果：
- * true
- */
-/**
- * 获取文件类型
- * @param file 文件对象
- */
-function getFileType(file) {
-    var cuttingPoint = file.lastIndexOf('.');
-    if (cuttingPoint == -1) {
-        return 'unknow';
-    }
-    else {
-        return file.substring(cuttingPoint + 1);
-    }
-}
-/**
- * 使用示例：
- *
- * var file = 文件对象;
- * getFileType(file);
- *
- * 输出结果：
- * jpg
- */
+exports.isArray = isArray;
 /**
  * 操控样式
  */
-var fnClass = {
+const fnClass = {
     /**
      * 样式是否存在
      * @param obj HTML元素
@@ -198,7 +155,7 @@ var fnClass = {
             return obj.classList.contains(sClass);
         }
         else {
-            var reg = new RegExp('\\b' + sClass + '\\b');
+            const reg = new RegExp('\\b' + sClass + '\\b');
             return reg.test(obj.className);
         }
     },
@@ -233,7 +190,7 @@ var fnClass = {
             obj.classList.remove(sClass);
         }
         else {
-            var reg = new RegExp('\\b' + sClass + '\\b');
+            const reg = new RegExp('\\b' + sClass + '\\b');
             if (this.hasClass(obj, sClass)) {
                 obj.className = obj.className.replace(reg, '').replace(/^\s+|\s+$/g, '').replace(/\s+/g, '');
             }
@@ -241,6 +198,7 @@ var fnClass = {
         return obj;
     }
 };
+exports.fnClass = fnClass;
 /**
  * 设置 css3 的样式
  * @param obj HTML元素
@@ -248,14 +206,134 @@ var fnClass = {
  * @param value 要设置的样式值
  */
 function setCss3Style(obj, name, value) {
-    var str = name.charAt(0).toUpperCase() + name.substring(1);
+    const str = name.charAt(0).toUpperCase() + name.substring(1);
     obj.style['Webkit' + str] = value;
     obj.style['Moz' + str] = value;
     obj.style['ms' + str] = value;
     obj.style['O' + str] = value;
     obj.style[name] = value;
 }
+exports.setCss3Style = setCss3Style;
 ;
+/**
+ * 倒计时
+ *
+ * @param options 参数对象
+ *
+ */
+function setCountdown(options) {
+    this.options = options || {};
+    this.timer = null;
+    this.newTimeSecond = null;
+    this.showTimeElement = null;
+    this.sDay = '';
+    this.sHour = '';
+    this.sMin = '';
+    this.sSec = '';
+    this.init = function () {
+        this.options.serverTimestamp = options.serverTimestamp || new Date().getTime();
+        this.options.startTimestamp = options.startTimestamp || 0;
+        this.options.showTimeElement = options.showTimeElement || '';
+        this.options.showTimeSymbol = options.showTimeSymbol || {};
+        this.sDay = this.options.showTimeSymbol.day;
+        this.sHour = this.options.showTimeSymbol.hour;
+        this.sMin = this.options.showTimeSymbol.min;
+        this.sSec = this.options.showTimeSymbol.sec;
+        // 如果没有活动开始时间，则退出
+        if (!/^\d{13}$/.test(this.options.startTimestamp)) {
+            return;
+        }
+        // 如果填写了 html 元素，则显示在该 html 元素上
+        if (this.options.showTimeElement) {
+            const oShowTimeElement = document.querySelectorAll(this.options.showTimeElement);
+            if (oShowTimeElement && oShowTimeElement.length) {
+                this.showTimeElement = oShowTimeElement;
+            }
+        }
+        // 将获取到的服务器时间转换为秒（方便计算）
+        this.newTimeSecond = parseInt(String(new Date(this.options.serverTimestamp).getTime() / 1000));
+        // 设置时间
+        this.setTime();
+    };
+    this.setTime = function () {
+        const _this = this;
+        const oServerTime = new Date(this.options.serverTimestamp);
+        const oStartTime = new Date(this.options.startTimestamp);
+        const oYear = oStartTime.getFullYear();
+        const oMonth = oStartTime.getMonth() + 1;
+        const oDay = oStartTime.getDay();
+        const oHour = oStartTime.getHours();
+        const oMin = oStartTime.getMinutes();
+        const oSec = oStartTime.getSeconds();
+        // 设置活动开始时间：年月日时分秒
+        oServerTime.setFullYear(oYear, oMonth, oDay);
+        oServerTime.setHours(oHour, oMin, oSec);
+        // 立即执行一次
+        this.timeRun(oStartTime);
+        // 不断使用定时器执行
+        this.timer = setInterval(function () {
+            _this.timeRun(oStartTime);
+        }, 1000);
+    };
+    // 时间换算
+    this.timeRun = function (oStartTime) {
+        // 秒数++，每一秒，秒数+1，代表从服务器时间获取到的时间基础上继续跑
+        this.newTimeSecond++;
+        // 算出新的时间差
+        let x = parseInt(String((oStartTime.getTime() - new Date(this.newTimeSecond * 1000).getTime()) / 1000));
+        // 剩余天数
+        const d = parseInt(String(x / 86400));
+        x %= 86400;
+        // 剩余小时数
+        const h = parseInt(String(x / 3600));
+        x %= 3600;
+        // 剩余分钟数
+        const m = parseInt(String(x / 60));
+        // 剩余秒数
+        x %= 60;
+        // 将换算好的时间通过回调函数抛出去，如果需要自定义显示格式，可以从这个回调函数中获取时间
+        this.options.showtime && this.options.showtime({
+            day: this.addZero(d),
+            hour: this.addZero(h),
+            min: this.addZero(m),
+            sec: this.addZero(x)
+        });
+        // 如果填写了 html 元素，而且自定义了 天/时/分/秒 的格式，则按照自定义的格式显示在该 html 元素上
+        if (this.showTimeElement && this.showTimeElement.length) {
+            for (let i = 0; i < this.showTimeElement.length; i++) {
+                let sShowTime = '';
+                const sDay = this.sDay ? this.addZero(d) + this.sDay : '';
+                const sHour = this.sHour ? this.addZero(h) + this.sHour : '';
+                const sMin = this.sMin ? this.addZero(m) + this.sMin : '';
+                const sSec = this.sSec ? this.addZero(x) + this.sSec : '';
+                sShowTime = sDay + sHour + sMin + sSec;
+                this.showTimeElement[i] && (this.showTimeElement[i].innerHTML = sShowTime);
+            }
+        }
+        // 判断时间是否倒数结束
+        if (d === 0 && h === 0 && m === 0 && x === 0) {
+            // 时间到，停止倒计时
+            clearInterval(this.timer);
+            if (this.showTimeElement && this.showTimeElement.length) {
+                for (let i = 0; i < this.showTimeElement.length; i++) {
+                    this.showTimeElement[i] && (this.showTimeElement[i].innerHTML = '00:00:00');
+                }
+            }
+            this.options.timeup && this.options.timeup();
+        }
+    };
+    // 单位数字，前面补0
+    this.addZero = function (num) {
+        if (num === 'undefined' || num === undefined || num === '' || num === null) {
+            return '';
+        }
+        ;
+        const newNum = typeof num === 'number' ? num : parseInt(num);
+        return newNum > 9 ? newNum : ('0' + newNum);
+    };
+    this.init();
+}
+exports.setCountdown = setCountdown;
 /**
  * 字符串间隔（字符串四位间隔）
  *
@@ -263,7 +341,7 @@ function setCss3Style(obj, name, value) {
  * @param {string} val 要转换的字符串
  * @returns {string} 返回处理完的字符串
  */
-function stringSpacing(type, val) {
+function setStringSpacing(type, val) {
     val = val.replace(/\s/g, '').replace(/(.{4})/g, '$1 ');
     if (type === 'bankcard') {
         val = val.replace(/\s/g, '').replace(/(.{4})/g, '$1 ');
@@ -281,17 +359,7 @@ function stringSpacing(type, val) {
     }
     return val;
 }
-/**
- * 使用示例：
- *
- * stringSpacing('bankcard': '6225888888888888');
- * stringSpacing('phone': '15912341234');
- *
- * 输出结果：
- *
- * 6225 8888 8888 8888
- * 159 1234 1234
- */
+exports.setStringSpacing = setStringSpacing;
 /**
  * 时间格式转换
  *
@@ -299,11 +367,10 @@ function stringSpacing(type, val) {
  * @param {string} [symbol='.'] 间隔符号
  * @returns {string} YYYY.MM.DD hh:mm:ss
  */
-function formatDate(time, symbol) {
-    if (symbol === void 0) { symbol = '.'; }
+function formatDate(time, symbol = '.') {
     if (time) {
-        var newTime = typeof time === 'number' ? time : parseInt(time);
-        var date = new Date(newTime);
+        const newTime = typeof time === 'number' ? time : parseInt(time);
+        const date = new Date(newTime);
         return date.getFullYear() + symbol + formatSingleNum(date.getMonth() + 1) + symbol + formatSingleNum(date.getDate()) +
             ' ' + formatSingleNum(date.getHours()) + ':' + formatSingleNum(date.getMinutes()) + ':' + formatSingleNum(date.getSeconds());
     }
@@ -311,6 +378,7 @@ function formatDate(time, symbol) {
         return '----.--.-- --:--:--';
     }
 }
+exports.formatDate = formatDate;
 /**
  * 将小于10的数字前面加上'0'
  *
@@ -320,9 +388,10 @@ function formatDate(time, symbol) {
 function formatSingleNum(num) {
     if (num === 'undefined' || num === undefined || num === '' || num === null)
         return;
-    var newNum = typeof num === 'number' ? num : parseInt(num);
+    const newNum = typeof num === 'number' ? num : parseInt(num);
     return newNum > 9 ? newNum : ('0' + newNum);
 }
+exports.formatSingleNum = formatSingleNum;
 /**
  * 字符串截取（多余的显示省略号）
  *
@@ -330,9 +399,8 @@ function formatSingleNum(num) {
  * @param {number} [len=10] 截取的长度
  * @returns {string} 返回处理完的字符串
  */
-function stringCut(value, len) {
-    if (len === void 0) { len = 10; }
-    var v = String(value);
+function stringCut(value, len = 10) {
+    const v = String(value);
     if (v) {
         if (v.length === 0) {
             return '';
@@ -341,7 +409,7 @@ function stringCut(value, len) {
             return v;
         }
         else {
-            var arr = v.split('');
+            const arr = v.split('');
             arr.length = len;
             return arr.join('') + '...';
         }
@@ -350,22 +418,15 @@ function stringCut(value, len) {
         return v;
     }
 }
-/**
- * 使用示例：
- *
- * stringCut('我我我我我我我我我我我我我我我我我我');
- *
- * 输出结果：
- *
- * 我我我我我我我我我我...
- */
+exports.stringCut = stringCut;
 /**
  * 数值添加千分位处理
  *
  * @param {*} num 需要处理的字符串或数字
  * @returns {string} 返回处理完的字符串
+ *
  */
-function thousandsFormat(num) {
+function formatThousands(num) {
     // 1.先去除空格,判断是否空值和非数
     num = num + '';
     // 去除空格
@@ -375,19 +436,19 @@ function thousandsFormat(num) {
     }
     ;
     // 2.针对是否有小数点，分情况处理
-    var index = num.indexOf('.');
+    const index = num.indexOf('.');
     if (index === -1) {
         // 无小数点
-        var reg = /(-?\d+)(\d{3})/;
+        const reg = /(-?\d+)(\d{3})/;
         while (reg.test(num)) {
             num = num.replace(reg, '$1,$2');
         }
         num += '.00';
     }
     else {
-        var intPart = num.substring(0, index);
-        var pointPart = num.substring(index + 1, num.length);
-        var reg = /(-?\d+)(\d{3})/;
+        let intPart = num.substring(0, index);
+        const pointPart = num.substring(index + 1, num.length);
+        const reg = /(-?\d+)(\d{3})/;
         while (reg.test(intPart)) {
             intPart = intPart.replace(reg, '$1,$2');
         }
@@ -395,21 +456,11 @@ function thousandsFormat(num) {
     }
     return num;
 }
-/**
- * 使用示例：
- *
- * thousandsFormat(1234567890456);
- * thousandsFormat('1234567890456');
- *
- * 输出结果：
- *
- * 1,234,567,890,456.00
- * 1,234,567,890,456.00
- */
+exports.formatThousands = formatThousands;
 /**
  * 判断浏览器
  */
-var fnBrowser = {
+const fnBrowser = {
     ua: window.navigator.userAgent.toLowerCase(),
     /**
      * 判断是移动端还是PC端
@@ -445,35 +496,40 @@ var fnBrowser = {
      */
     isWebView: function () { }
 };
-function json2url(json) {
+exports.fnBrowser = fnBrowser;
+/**
+ * json 转成 url
+ *
+ * @param json json对象
+ */
+function jsonTourl(json) {
     json.t = Math.random();
-    var arr = [];
-    for (var name in json) {
+    let arr = [];
+    for (let name in json) {
         arr.push(name + '=' + encodeURIComponent(json[name]));
     }
     return arr.join('&');
 }
+exports.jsonTourl = jsonTourl;
 /**
  * HTTP 请求
  */
-var http = {
-    get: function (url, params, options) {
-        if (params === void 0) { params = {}; }
-        var xhr = new XMLHttpRequest();
-        var timer = null;
-        for (var pro in options.headers) {
+const http = {
+    get: function (url, params = {}, options) {
+        const xhr = new XMLHttpRequest();
+        let timer = null;
+        for (let pro in options.headers) {
             xhr.setRequestHeader(pro, options.headers[pro]);
         }
         ;
-        xhr.open('GET', url + '?' + json2url(params), true);
+        xhr.open('GET', url + '?' + jsonTourl(params), true);
         xhr.send();
-        return this.hanlde(xhr, timer);
+        return this.hanlde(xhr, timer, options);
     },
-    post: function (url, params, options) {
-        if (params === void 0) { params = {}; }
-        var xhr = new XMLHttpRequest();
-        var timer = null;
-        for (var pro in options.headers) {
+    post: function (url, params = {}, options) {
+        const xhr = new XMLHttpRequest();
+        let timer = null;
+        for (let pro in options.headers) {
             xhr.setRequestHeader(pro, options.headers[pro]);
         }
         ;
@@ -483,12 +539,12 @@ var http = {
             xhr.send(params);
         }
         else {
-            xhr.send(json2url(params));
+            xhr.send(jsonTourl(params));
         }
         return this.hanlde(xhr, timer, options);
     },
     hanlde: function (xhr, timer, options) {
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             xhr.onreadystatechange = function () {
                 // 完成
                 if (xhr.readyState === 4) {
@@ -510,74 +566,6 @@ var http = {
                 }, options.timeout);
             }
         });
-    },
-    handleError: function () { }
+    }
 };
 exports.http = http;
-/**
- * @description 自己封装的简单 ajax
- * @param {*Object} options ajax 选项
- * @returns {Promise}
- * url 提交的 url
- * data 提交的数据对象
- * timeout 请求超时时间
- * header 需要设置的请求头
- * success 请求成功回调
- * error 请求失败回调
- */
-function ajax(options) {
-    // options = options || {};
-    if (!options.url) {
-        return;
-    }
-    options.data = options.data || {};
-    options.type = options.type || 'GET';
-    options.timeout = options.timeout || 0;
-    options.headers = options.headers || {};
-    var xhr = null;
-    var timer = null;
-    //1 创建
-    xhr = new XMLHttpRequest();
-    if (options.type.toUpperCase() === 'GET') {
-        xhr.open('GET', options.url + '?' + json2url(options.data), true);
-        xhr.send();
-    }
-    else {
-        xhr.open('POST', options.url, true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        for (var pro in options.headers) {
-            xhr.setRequestHeader(pro, options.headers[pro]);
-        }
-        if (typeof options.data === 'string') {
-            xhr.send(options.data);
-        }
-        else {
-            xhr.send(json2url(options.data));
-        }
-    }
-    return new Promise(function (resolve, reject) {
-        xhr.onreadystatechange = function () {
-            // 完成
-            if (xhr.readyState === 4) {
-                clearTimeout(timer);
-                // 成功
-                if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
-                    options.success && options.success(JSON.parse(xhr.responseText));
-                    resolve(JSON.parse(xhr.responseText));
-                }
-                else {
-                    //失败
-                    options.error && options.error('error');
-                    reject('error');
-                }
-            }
-        };
-        if (options.timeout) {
-            timer = setTimeout(function () {
-                reject('timeout');
-                // 终止
-                xhr.abort();
-            }, options.timeout);
-        }
-    });
-}

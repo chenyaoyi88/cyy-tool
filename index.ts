@@ -2,7 +2,7 @@
  * @Author: chenyaoyi 
  * @Date: 2017-12-25 11:41:11 
  * @Last Modified by: chenyaoyi
- * @Last Modified time: 2017-12-26 09:23:55
+ * @Last Modified time: 2018-01-03 17:53:46
  */
 
 /// <reference path='index.d.ts' />
@@ -207,40 +207,143 @@ function setCss3Style(obj: HTMLElement, name: string, value: string): void {
 };
 
 /**
- * 设置倒计时
+ * 倒计时
  * 
- * @param id HTML元素的 ID
- * @param currentTimestamp 当前时间戳
- * @param targetTimestamp 目标时间时间戳
+ * @param options 参数对象
+ * 
  */
-function setTimeCountDown(id, currentTimestamp, targetTimestamp) {
-    const oShowTime = document.querySelector('#' + id);
-    if (!oShowTime) return;
-    const regTime = /^\d{13}$/;
-    if (!regTime.test(currentTimestamp)) return;
-    if (!regTime.test(targetTimestamp)) return;
+function setCountdown(options: Countdown) {
 
-    const oTarget = new Date(currentTimestamp) || new Date();
-    const oTargetTime = new Date(targetTimestamp);
-    const oYear = oTargetTime.getFullYear();
-    const oMonth = oTargetTime.getMonth();
-    const oDay = oTargetTime.getDay();
-    oTarget.setFullYear(oYear, oMonth, oDay);
-    oTarget.setHours(0, 0, 0);
+    this.options = options || {};
+    this.timer = null;
+    this.newTimeSecond = null;
+    this.showTimeElement = null;
+    this.sDay = '';
+    this.sHour = '';
+    this.sMin = '';
+    this.sSec = '';
 
-    countDown();
-    setInterval(countDown, 1000);
+    // 初始化设置
+    this.init = function (): void {
+        this.options.serverTimestamp = options.serverTimestamp || new Date().getTime();
+        this.options.startTimestamp = options.startTimestamp || 0;
+        this.options.showTimeElement = options.showTimeElement || '';
+        this.options.showTimeSymbol = options.showTimeSymbol || {};
 
-    function countDown() {
-        let x = parseInt(String((oTarget.getTime() - new Date().getTime()) / 1000));
+        this.sDay = this.options.showTimeSymbol.day;
+        this.sHour = this.options.showTimeSymbol.hour;
+        this.sMin = this.options.showTimeSymbol.min;
+        this.sSec = this.options.showTimeSymbol.sec;
+
+        // 如果没有活动开始时间，则退出
+        if (!/^\d{13}$/.test(this.options.startTimestamp)) {
+            return;
+        }
+
+        // 如果填写了 html 元素，则显示在该 html 元素上
+        if (this.options.showTimeElement) {
+            const oShowTimeElement = document.querySelectorAll(this.options.showTimeElement);
+            if (oShowTimeElement && oShowTimeElement.length) {
+                this.showTimeElement = oShowTimeElement;
+            }
+        }
+
+        // 将获取到的服务器时间转换为秒（方便计算）
+        this.newTimeSecond = parseInt(String(new Date(this.options.serverTimestamp).getTime() / 1000));
+
+        // 设置时间
+        this.setTime();
+    };
+
+    // 设置时间
+    this.setTime = function () {
+        const _this = this;
+        const oServerTime = new Date(this.options.serverTimestamp);
+        const oStartTime = new Date(this.options.startTimestamp);
+        const oYear = oStartTime.getFullYear();
+        const oMonth = oStartTime.getMonth() + 1;
+        const oDay = oStartTime.getDay();
+        const oHour = oStartTime.getHours();
+        const oMin = oStartTime.getMinutes();
+        const oSec = oStartTime.getSeconds();
+
+        // 设置活动开始时间：年月日时分秒
+        oServerTime.setFullYear(oYear, oMonth, oDay);
+        oServerTime.setHours(oHour, oMin, oSec);
+
+        // 时间换算，先立即执行一次
+        this.timeRun(oStartTime);
+
+        // 不断使用定时器执行
+        this.timer = setInterval(function () {
+            _this.timeRun(oStartTime);
+        }, 1000);
+
+    };
+
+    // 时间换算
+    this.timeRun = function (oStartTime) {
+        // 秒数++，每一秒，秒数+1，代表从服务器时间获取到的时间基础上继续跑
+        this.newTimeSecond++;
+        // 算出新的时间差
+        let x = parseInt(String((oStartTime.getTime() - new Date(this.newTimeSecond * 1000).getTime()) / 1000));
+        // 剩余天数
         const d = parseInt(String(x / 86400));
         x %= 86400;
+        // 剩余小时数
         const h = parseInt(String(x / 3600));
         x %= 3600;
+        // 剩余分钟数
         const m = parseInt(String(x / 60));
+        // 剩余秒数
         x %= 60;
-        oShowTime && (oShowTime.innerHTML = `还有${formatSingleNum(d)}天${formatSingleNum(h)}小时${formatSingleNum(m)}分${formatSingleNum(x)}秒`);
-    }
+
+        // 将换算好的时间通过回调函数抛出去，如果需要自定义显示格式，可以从这个回调函数中获取时间
+        this.options.showtime && this.options.showtime({
+            day: this.addZero(d),
+            hour: this.addZero(h),
+            min: this.addZero(m),
+            sec: this.addZero(x)
+        });
+
+        // 如果填写了 html 元素，而且自定义了 天/时/分/秒 的格式，则按照自定义的格式显示在该 html 元素上
+        if (this.showTimeElement && this.showTimeElement.length) {
+            for (let i = 0; i < this.showTimeElement.length; i++) {
+
+                let sShowTime = '';
+                const sDay = this.sDay ? this.addZero(d) + this.sDay : '';
+                const sHour = this.sHour ? this.addZero(h) + this.sHour : '';
+                const sMin = this.sMin ? this.addZero(m) + this.sMin : '';
+                const sSec = this.sSec ? this.addZero(x) + this.sSec : '';
+                sShowTime = sDay + sHour + sMin + sSec;
+
+                this.showTimeElement[i] && (this.showTimeElement[i].innerHTML = sShowTime);
+            }
+        }
+
+        // 判断时间是否倒数结束
+        if (d === 0 && h === 0 && m === 0 && x === 0) {
+            // 时间到，停止倒计时
+            clearInterval(this.timer);
+            if (this.showTimeElement && this.showTimeElement.length) {
+                for (let i = 0; i < this.showTimeElement.length; i++) {
+                    this.showTimeElement[i] && (this.showTimeElement[i].innerHTML = '00:00:00');
+                }
+            }
+            this.options.timeup && this.options.timeup();
+        }
+    };
+
+    // 单位数字，前面补0
+    this.addZero = function (num: any): string | number {
+        if (num === 'undefined' || num === undefined || num === '' || num === null) {
+            return '';
+        };
+        const newNum = typeof num === 'number' ? num : parseInt(num);
+        return newNum > 9 ? newNum : ('0' + newNum);
+    };
+
+    this.init();
 }
 
 
@@ -251,7 +354,7 @@ function setTimeCountDown(id, currentTimestamp, targetTimestamp) {
  * @param {string} val 要转换的字符串
  * @returns {string} 返回处理完的字符串
  */
-function stringSpacing(type: string, val: string): string {
+function setStringSpacing(type: string, val: string): string {
     val = val.replace(/\s/g, '').replace(/(.{4})/g, '$1 ');
     if (type === 'bankcard') {
         val = val.replace(/\s/g, '').replace(/(.{4})/g, '$1 ');
@@ -412,30 +515,6 @@ function jsonTourl(json: { t: number }): string {
     return arr.join('&');
 }
 
-// function showCountDown(id, year, month, day) {
-
-//     const oShowTime = document.querySelector(id);
-//     var oTarget = new Date();
-//     oTarget.setFullYear(year, month, day);
-//     oTarget.setHours(0, 0, 0);
-
-//     countDown();
-//     setInterval(countDown, 1000);
-
-//     function countDown() {
-//         var x = parseInt((oTarget.getTime() - new Date().getTime()) / 1000);
-
-//         var d = parseInt(x / 86400);
-//         x %= 86400;
-//         var h = parseInt(x / 3600);
-//         x %= 3600;
-//         var m = parseInt(x / 60);
-//         x %= 60;
-
-//         oShowTime.innerHTML = `还有${d}天${h}小时${m}分${x}秒`;
-//     }
-// }
-
 /**
  * HTTP 请求
  */
@@ -510,7 +589,8 @@ export {
     fnClass,
     fnBrowser,
     setCss3Style,
-    stringSpacing,
+    setCountdown,
+    setStringSpacing,
     formatDate,
     formatSingleNum,
     formatThousands,

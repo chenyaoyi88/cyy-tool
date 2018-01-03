@@ -67,4 +67,49 @@ const json = {
     school: '卧槽'
 };
 jsonTourl(json);    // name=abc&age=18&school=%E5%8D%A7%E6%A7%BD&t=0.7911412332962664
+
+// 倒计时
+// html 元素
+// <div id="div1" class="class-div1"></div>
+// <div class="class-div1"></div>
+// <br>
+// <div id="div2"></div>
+
+const oShowTime1 = document.getElementById('div1');
+const countdownTimeSec1 = 10;
+
+// 调用方式一：从回调函数里面获取时间，自行决定显示方式
+new Countdown({
+    serverTimestamp: new Date().getTime(),
+    startTimestamp: (new Date().getTime() / 1000 + countdownTimeSec1) * 1000,
+    showtime: function (time) {
+        oShowTime1.innerHTML = time.day + '天' + time.hour + '小时' + time.min + '分' + time.sec + '秒';
+    },
+    timeup: function () {
+        console.log('时间到1');
+    }
+});
+
+// 输出：
+// 00天00小时00分09秒
+
+// 调用方式二：设置好显示的 html 元素和自定义显示的格式
+new Countdown({
+    showTimeElement: '.class-div1',
+    serverTimestamp: new Date().getTime(),
+    startTimestamp: (new Date().getTime() / 1000 + countdownTimeSec1) * 1000,
+    showTimeSymbol: {
+        day: '天',
+        hour: '小时',
+        min: '分',
+        sec: '秒'
+    },
+    timeup: function () {
+        console.log('时间到2');
+    }
+});
+
+// 输出：
+// 00天00时00分06秒
+// 00天00时00分06秒
 ```
