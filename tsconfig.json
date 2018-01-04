@@ -9,6 +9,14 @@
             "es6",
             "dom",
             "es5"
-        ]
-    }
+        ],
+        "outDir": "./dist"
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
 }
