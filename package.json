@@ -1,6 +1,6 @@
 {
   "name": "cyy-tool",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "cyy-tool",
   "main": "index.js",
   "scripts": {
