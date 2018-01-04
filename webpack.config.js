@@ -1,7 +1,7 @@
 module.exports = {
-    entry: './index.ts',
+    entry: './src/index.ts',
     output: {
-        filename: '[name].js',
+        filename: './dist/[name].js',
         path: __dirname
     },
     module: {

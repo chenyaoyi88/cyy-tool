@@ -3,12 +3,14 @@
         "moduleResolution": "node",
         "sourceMap": false,
         "noImplicitAny": false,
+        "allowJs": true,
         "module": "commonjs",
         "target": "es5",
         "lib": [
             "es6",
             "dom",
             "es5"
-        ]
+        ],
+        "outDir": "dist/"
     }
 }

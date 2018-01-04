@@ -1,96 +1,10 @@
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(1));
-__export(__webpack_require__(2));
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
 /*
  * @Author: chenyaoyi
  * @Date: 2017-12-25 11:41:11
  * @Last Modified by: chenyaoyi
- * @Last Modified time: 2018-01-03 18:18:16
+ * @Last Modified time: 2018-01-04 10:06:50
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-/// <reference path='index.d.ts' />
+/// <reference path='../index.d.ts' />
 /**
  * DOM 元素全部加载完成
  * @param fn 成功回调
@@ -109,7 +23,6 @@ function domReady(fn) {
         });
     }
 }
-exports.domReady = domReady;
 /**
  * 确保页面中 js/css 完全加载
  *
@@ -138,7 +51,6 @@ function loadFile(url, fnSucc) {
         }
     };
 }
-exports.loadFile = loadFile;
 /**
  * url 上面获取参数对应的值
  *
@@ -153,7 +65,6 @@ function getQueryString(name) {
     ;
     return null;
 }
-exports.getQueryString = getQueryString;
 /**
  * 返回一个在特点范围内的随机数字
  *
@@ -163,7 +74,6 @@ exports.getQueryString = getQueryString;
 function getRandomNum(startNum, endNum) {
     return parseInt(String(Math.random() * (endNum + 1 - startNum) + startNum));
 }
-exports.getRandomNum = getRandomNum;
 /**
  * 获取文件类型
  * @param file 文件对象
@@ -177,7 +87,6 @@ function getFileType(file) {
         return file.substring(cuttingPoint + 1);
     }
 }
-exports.getFileType = getFileType;
 /**
  * 鼠标滚轮事件
  * @param obj 响应鼠标滚轮的元素
@@ -208,23 +117,20 @@ function fnMouseWheel(obj, fn) {
         return false;
     }
 }
-exports.fnMouseWheel = fnMouseWheel;
 /**
  * 判断对象是否为空，true -> json为空
  * @param json json 对象
  */
 function isJsonEmpty(json) {
-    for (var name in json) {
+    for (var name_1 in json) {
         // 如果 json 有数据则会进入循环
         return false;
     }
     return true;
 }
-exports.isJsonEmpty = isJsonEmpty;
 function isArray(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
 }
-exports.isArray = isArray;
 /**
  * 操控样式
  */
@@ -282,7 +188,6 @@ var fnClass = {
         return obj;
     }
 };
-exports.fnClass = fnClass;
 /**
  * 设置 css3 的样式
  * @param obj HTML元素
@@ -297,7 +202,6 @@ function setCss3Style(obj, name, value) {
     obj.style['O' + str] = value;
     obj.style[name] = value;
 }
-exports.setCss3Style = setCss3Style;
 ;
 /**
  * 倒计时
@@ -419,7 +323,6 @@ function setCountdown(options) {
     };
     this.init();
 }
-exports.setCountdown = setCountdown;
 /**
  * 字符串间隔（字符串四位间隔）
  *
@@ -445,7 +348,6 @@ function setStringSpacing(type, val) {
     }
     return val;
 }
-exports.setStringSpacing = setStringSpacing;
 /**
  * 时间格式转换
  *
@@ -465,7 +367,6 @@ function formatDate(time, symbol) {
         return '----.--.-- --:--:--';
     }
 }
-exports.formatDate = formatDate;
 /**
  * 将小于10的数字前面加上'0'
  *
@@ -478,7 +379,6 @@ function formatSingleNum(num) {
     var newNum = typeof num === 'number' ? num : parseInt(num);
     return newNum > 9 ? newNum : ('0' + newNum);
 }
-exports.formatSingleNum = formatSingleNum;
 /**
  * 字符串截取（多余的显示省略号）
  *
@@ -506,7 +406,6 @@ function stringCut(value, len) {
         return v;
     }
 }
-exports.stringCut = stringCut;
 /**
  * 数值添加千分位处理
  *
@@ -544,7 +443,6 @@ function formatThousands(num) {
     }
     return num;
 }
-exports.formatThousands = formatThousands;
 /**
  * 判断浏览器
  */
@@ -584,7 +482,6 @@ var fnBrowser = {
      */
     isWebView: function () { }
 };
-exports.fnBrowser = fnBrowser;
 /**
  * json 转成 url
  *
@@ -593,12 +490,11 @@ exports.fnBrowser = fnBrowser;
 function jsonTourl(json) {
     json.t = Math.random();
     var arr = [];
-    for (var name in json) {
-        arr.push(name + '=' + encodeURIComponent(json[name]));
+    for (var name_2 in json) {
+        arr.push(name_2 + '=' + encodeURIComponent(json[name_2]));
     }
     return arr.join('&');
 }
-exports.jsonTourl = jsonTourl;
 /**
  * HTTP 请求
  */
@@ -658,144 +554,24 @@ var http = {
         });
     }
 };
-exports.http = http;
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Validation = /** @class */ (function () {
-    function Validation() {
-    }
-    /**
-     * 检验输入值是否为空
-     * @param {string} val
-     */
-    Validation.prototype.checkEmpty = function (val) {
-        var reg = /\S/;
-        return !reg.test(val) ? false : true;
-    };
-    /**
-     * 检验手机号
-     * @param {string} val - {
-     * 移动号段：
-     * 134 135 136 137 138 139 147 150 151 152 157 158 159 172 178 182 183 184 187 188
-     * 联通号段：
-     * 130 131 132 145 155 156 171 175 176 185 186
-     * 电信号段：
-     * 133 149 153 173 177 180 181 189
-     * 虚拟运营商:
-     * 170
-     * }
-     */
-    Validation.prototype.checkPhone = function (val) {
-        var reg = /^(13[0-9]|14[579]|15[0-35-9]|17[01235678]|18[0-9])[0-9]{8}$/;
-        return !reg.test(val) ? false : true;
-    };
-    /**
-     * 检验是否为纯数字
-     * @param {string} val
-     */
-    Validation.prototype.checkPureNum = function (val) {
-        var reg = /^[0-9]*$/;
-        return !reg.test(val) ? false : true;
-    };
-    /**
-     * 大于等于0的整数或者小数
-     * @param {any} val
-     */
-    Validation.prototype.checkAmountNum = function (val) {
-        var reg = /^(0|0\.\d+|[1-9](\.\d+)?(\d+)?(\.\d+)?)$/g;
-        return !reg.test(val) ? false : true;
-    };
-    /**
-     * 检验val的值的长度是否与len相等
-     * @param {string} val - 值
-     * @param {number} len - 长度
-     */
-    Validation.prototype.checkLengthEqual = function (val, len) {
-        return val.length !== len ? false : true;
-    };
-    /**
-     * 检验val的长度是否在min和max之间
-     * @param {string} val - 值
-     * @param {number} min - 最小长度
-     * @param {number} max - 最大长度
-     */
-    Validation.prototype.checkLength = function (val, min, max) {
-        if (max === undefined) {
-            return (val.length < min) ? false : true;
-        }
-        return (val.length < min || val.length > max) ? false : true;
-    };
-    /**
-     * 格式化千分位
-     * @param {number} val - 值
-     */
-    Validation.prototype.formatThousandth = function (val) {
-        var reg = /(\d)(?=(\d{3})+(?:\.\d+)?$)/g;
-        if (!!val) {
-            return val.replace(reg, '$1,');
-        }
-        else {
-            return val;
-        }
-    };
-    /**
-     * 将千分位的','去掉
-     * @param {number} val - 值
-     */
-    Validation.prototype.parseThousandth = function (val) {
-        return val.replace(/,/g, '');
-    };
-    /**
-     * 检验身份证号
-     * @param {number} val - 值
-     */
-    Validation.prototype.checkCardID = function (val) {
-        var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
-        return !reg.test(val) ? false : true;
-    };
-    /**
-     * 校验银行卡号
-     * @param {number} val - 银行卡
-     */
-    Validation.prototype.checkBankCard = function (val) {
-        var reg = /^\d{16}|\d{19}$/;
-        return !reg.test(val) ? false : true;
-    };
-    /**
-     * 校验邮箱
-     * @param val 邮箱
-     */
-    Validation.prototype.checkEmail = function (val) {
-        var reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-        return !reg.test(val) ? false : true;
-    };
-    /**
-     * 检验密码
-     * @param {string} val - 密码字符串，由6-16位的数字和字母混合组成
-     */
-    Validation.prototype.checkPassword = function (val) {
-        var reg = /^(?![^a-zA-Z]+$)(?!\D+$).{6,16}$/g;
-        return !reg.test(val) ? false : true;
-    };
-    /**
-     * 校验中文名
-     * @param val 中文
-     */
-    Validation.prototype.checkUserName = function (val) {
-        var reg = /^[\u4E00-\u9FA5\·\.]+$/g;
-        return reg.test(val) ? true : false;
-    };
-    return Validation;
-}());
-exports.default = new Validation;
-
-
-/***/ })
-/******/ ]);
+// export {
+//     domReady,
+//     loadFile,
+//     getFileType,
+//     getQueryString,
+//     getRandomNum,
+//     fnMouseWheel,
+//     isJsonEmpty,
+//     isArray,
+//     fnClass,
+//     fnBrowser,
+//     setCss3Style,
+//     setCountdown,
+//     setStringSpacing,
+//     formatDate,
+//     formatSingleNum,
+//     formatThousands,
+//     stringCut,
+//     jsonTourl,
+//     http
+// }; 
