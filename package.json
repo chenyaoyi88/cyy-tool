@@ -1,6 +1,6 @@
 {
   "name": "cyy-tool",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "cyy-tool",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "cyy-tool"
   ],
   "author": "cyy",
-  "license": "MIT",
+  "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
