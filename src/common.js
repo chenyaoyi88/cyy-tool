@@ -5,7 +5,7 @@
  * @Last Modified by: chenyaoyi
  * @Last Modified time: 2018-01-04 10:07:56
  */
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 /// <reference path='../index.d.ts' />
 /**
  * DOM 元素全部加载完成

@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 var Validation = /** @class */ (function () {
     function Validation() {
     }
@@ -126,4 +126,4 @@ var Validation = /** @class */ (function () {
     };
     return Validation;
 }());
-exports.default = new Validation;
+exports["default"] = new Validation;
