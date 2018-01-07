@@ -135,4 +135,6 @@ class Validation {
 
 }
 
-export default new Validation;
+const validate = new Validation;
+
+export { validate };

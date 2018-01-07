@@ -1,5 +1,5 @@
 
-export interface Ajax<T> {
+interface Ajax<T> {
     // 请求类型
     type: string;
     // 提交的 url 
@@ -17,7 +17,7 @@ export interface Ajax<T> {
 }
 
 
-export interface Ajax_Options {
+interface Ajax_Options {
     headers: any;
     timeout: number;
 }
@@ -25,7 +25,7 @@ export interface Ajax_Options {
 /**
  * 倒计时
  */
-export interface Countdown {
+interface Countdown {
     // 当前的服务器时间
     serverTimestamp: any;
     // 活动开始时间
