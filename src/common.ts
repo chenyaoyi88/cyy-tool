@@ -5,7 +5,7 @@
  * @Last Modified time: 2018-01-04 10:07:56
  */
 
-/// <reference path='../index.d.ts' />
+/// <reference path='index.d.ts' />
 
 /**
  * DOM 元素全部加载完成
