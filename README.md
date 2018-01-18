@@ -79,7 +79,7 @@ const oShowTime1 = document.getElementById('div1');
 const countdownTimeSec1 = 10;
 
 // 调用方式一：从回调函数里面获取时间，自行决定显示方式
-new Countdown({
+new setCountdown({
     serverTimestamp: new Date().getTime(),
     startTimestamp: (new Date().getTime() / 1000 + countdownTimeSec1) * 1000,
     showtime: function (time) {
@@ -94,7 +94,7 @@ new Countdown({
 // 00天00小时00分09秒
 
 // 调用方式二：设置好显示的 html 元素和自定义显示的格式
-new Countdown({
+new setCountdown({
     showTimeElement: '.class-div1',
     serverTimestamp: new Date().getTime(),
     startTimestamp: (new Date().getTime() / 1000 + countdownTimeSec1) * 1000,
