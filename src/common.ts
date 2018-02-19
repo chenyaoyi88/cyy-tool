@@ -522,11 +522,12 @@ const http = {
     get: function (url: string, params: any = {}, options?: Ajax_Options): Promise<any> {
         const xhr = new XMLHttpRequest();
         let timer = null;
+
+        xhr.open('GET', url + '?' + jsonTourl(params), true);   
         for (let pro in options.headers) {
             xhr.setRequestHeader(pro, options.headers[pro]);
         };
 
-        xhr.open('GET', url + '?' + jsonTourl(params), true);
         xhr.send();
 
         return this.hanlde(xhr, timer, options);
