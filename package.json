@@ -1,6 +1,6 @@
 {
   "name": "cyy-tool",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "cyy-tool",
   "scripts": {
     "start": "browser-sync start --server --no-notify --directory --files **/*.css,**/*.js,**/*.html"
