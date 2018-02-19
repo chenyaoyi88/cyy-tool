@@ -522,12 +522,13 @@ const http = {
     get: function (url: string, params: any = {}, options?: Ajax_Options): Promise<any> {
         const xhr = new XMLHttpRequest();
         let timer = null;
+        if (options && options.headers) {
+            for (let pro in options.headers) {
+                xhr.setRequestHeader(pro, options.headers[pro]);
+            };
+        }
 
-        xhr.open('GET', url + '?' + jsonTourl(params), true);   
-        for (let pro in options.headers) {
-            xhr.setRequestHeader(pro, options.headers[pro]);
-        };
-
+        xhr.open('GET', url + '?' + jsonTourl(params), true);
         xhr.send();
 
         return this.hanlde(xhr, timer, options);
@@ -536,9 +537,11 @@ const http = {
     post: function (url: string, params: any = {}, options?: Ajax_Options): Promise<any> {
         const xhr = new XMLHttpRequest();
         let timer = null;
-        for (let pro in options.headers) {
-            xhr.setRequestHeader(pro, options.headers[pro]);
-        };
+        if (options && options.headers) {
+            for (let pro in options.headers) {
+                xhr.setRequestHeader(pro, options.headers[pro]);
+            };
+        }
 
         xhr.open('POST', url, true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -566,7 +569,7 @@ const http = {
                 }
             };
 
-            if (options.timeout) {
+            if (options && options.timeout) {
                 timer = setTimeout(function () {
                     reject('timeout');
                     // 终止
